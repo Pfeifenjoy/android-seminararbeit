@@ -1,4 +1,4 @@
-package net.ddns.mett.piccer;
+package arwed_dominic.dhbw.org.piccer;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

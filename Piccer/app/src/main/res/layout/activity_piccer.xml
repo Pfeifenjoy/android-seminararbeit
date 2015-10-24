@@ -3,7 +3,35 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".piccer">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Piccer">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+            <ListView
+                android:id="@+id/mainPhotoList"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+            </ListView>
+        </ScrollView>
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/add_button"
+                android:layout_weight="0" />
+        </LinearLayout>
+    </LinearLayout>
 
 
 </RelativeLayout>

@@ -1,11 +1,11 @@
-package net.ddns.mett.piccer;
+package arwed_dominic.dhbw.org.piccer;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class piccer extends AppCompatActivity {
+public class Piccer extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
