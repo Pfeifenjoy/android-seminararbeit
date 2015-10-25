@@ -3,6 +3,8 @@ package org.dhbw.arwed_dominic.piccer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +12,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.Date;
 
 public class Piccer extends AppCompatActivity {
@@ -19,14 +23,23 @@ public class Piccer extends AppCompatActivity {
     public static final int REQUEST_CAMERA = 0;
     public static final String IMAGE_LIST_STATE = "imageList";
 
-    private ImageList mainImageList;
+    private ListView mainImageList;
+    private ImageItemAdapter adapter;
+    private PiccerDatabaseHandler handler;
+    private ImageItem tmpImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_piccer);
 
-        mainImageList = (ImageList)findViewById(R.id.mainImageList);
+        //Initialize the list
+        this.handler = new PiccerDatabaseHandler(this);
+        this.adapter = new ImageItemAdapter(this, handler.getImageTableCursor(), 0);
+        mainImageList = (ListView)findViewById(R.id.mainImageList);
+        mainImageList.setAdapter(adapter);
+
         if(savedInstanceState != null) {
             Parcelable state = savedInstanceState.getParcelable(IMAGE_LIST_STATE);
             mainImageList.onRestoreInstanceState(state);
@@ -58,6 +71,8 @@ public class Piccer extends AppCompatActivity {
     public void takePicture(View source) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(intent.resolveActivity(getPackageManager()) != null) {
+            this.tmpImage = new ImageItem(this);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, this.tmpImage.getImageUri());
             startActivityForResult(intent, REQUEST_CAMERA);
         } else {
             Context c = getApplicationContext();
@@ -71,9 +86,9 @@ public class Piccer extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            PiccerDatabaseHandler handler = new PiccerDatabaseHandler(this);
-            handler.addImage(new Date());
+            this.tmpImage.updateCreated();
+            this.handler.addImage(this.tmpImage);
+            this.adapter.notifyDataSetChanged();
         }
     }
 

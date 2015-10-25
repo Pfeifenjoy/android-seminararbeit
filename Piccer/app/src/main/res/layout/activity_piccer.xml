@@ -10,11 +10,11 @@
         android:fillViewport="true"
         android:layout_weight="1">
 
-        <org.dhbw.arwed_dominic.piccer.ImageList
+        <ListView
             android:id="@+id/mainImageList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            ></org.dhbw.arwed_dominic.piccer.ImageList>
+            ></ListView>
     </ScrollView>
 
     <LinearLayout
