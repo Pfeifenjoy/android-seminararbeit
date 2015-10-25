@@ -33,7 +33,9 @@ public class ImageList extends ListView {
     }
 
     public void init(Context context) {
-        this.adapter = new ImageItemAdapter(context, R.layout.image_item, items);
+        PiccerDatabaseHandler handler = new PiccerDatabaseHandler(context);
+
+        this.adapter = new ImageItemAdapter(context, handler.getImageTableCursor(), 0);
         setAdapter(this.adapter);
     }
 

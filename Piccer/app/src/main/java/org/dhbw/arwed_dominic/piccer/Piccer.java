@@ -72,7 +72,8 @@ public class Piccer extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            mainImageList.addImage(new Date(), "");
+            PiccerDatabaseHandler handler = new PiccerDatabaseHandler(this);
+            handler.addImage(new Date());
         }
     }
 
