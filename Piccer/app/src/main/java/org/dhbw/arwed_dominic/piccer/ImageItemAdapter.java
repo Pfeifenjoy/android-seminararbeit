@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -45,7 +46,8 @@ public class ImageItemAdapter extends CursorAdapter {
         String name = cursor.getString(cursor.getColumnIndex(PiccerDatabaseHandler.PATH));
         ImageItem imageItem = new ImageItem(context, created, name);
         tvCreationDate.setText(imageItem.getCreated());
-        (new ImageLoader(ivThumbnail, imageItem)).execute();
+        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.imgProgressbar);
+        new ImageLoader(ivThumbnail, imageItem, progressBar).execute();
     }
 
 }

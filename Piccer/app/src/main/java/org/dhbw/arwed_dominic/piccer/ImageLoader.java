@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
-
+import android.widget.ProgressBar;
 
 
 /**
@@ -14,10 +14,12 @@ public class ImageLoader extends AsyncTask<Object, Void, Bitmap> {
     private ImageView imageView;
     private ImageItem imageItem;
     private String path;
+    private ProgressBar progressBar;
 
-    public ImageLoader(ImageView imageView, ImageItem imageItem) {
+    public ImageLoader(ImageView imageView, ImageItem imageItem, ProgressBar progressBar) {
         this.imageView = imageView;
         this.imageItem = imageItem;
+        this.progressBar = progressBar;
         //this.path = imageView.getTag().toString();
     }
 
@@ -33,6 +35,7 @@ public class ImageLoader extends AsyncTask<Object, Void, Bitmap> {
 //            return;
 //        }
         if(result != null && imageView != null) {
+            progressBar.setVisibility(View.GONE);
             imageView.setVisibility(View.VISIBLE);
             imageView.setImageBitmap(result);
         } else {
@@ -42,8 +45,7 @@ public class ImageLoader extends AsyncTask<Object, Void, Bitmap> {
 
     @Override
     protected void onPreExecute() {
-        imageView.setImageResource(R.drawable.ic_filter_black_18dp);
-        imageView.setVisibility(View.VISIBLE);
-
+        this.imageView.setVisibility(View.GONE);
+        this.progressBar.setVisibility(View.VISIBLE);
     }
 }

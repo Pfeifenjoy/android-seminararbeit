@@ -48,12 +48,8 @@ public class ImageItem {
         return BitmapFactory.decodeFile(this.getFile().getAbsolutePath());
     }
     public Bitmap getThumbnail() {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(this.getFile().getAbsolutePath(), options);
-        options.inSampleSize = 25;
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(this.getFile().getAbsolutePath(), options);
+        Bitmap bigImage = BitmapFactory.decodeFile(this.getFile().getAbsolutePath());
+        return Bitmap.createScaledBitmap(bigImage, 100, 150, false);
     }
     public File getFile() {
         this.file = this.file == null ?
