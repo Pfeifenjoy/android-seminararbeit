@@ -1,4 +1,4 @@
-package arwed_dominic.dhbw.org.piccer;
+package org.dhbw.arwed_dominic.piccer;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
