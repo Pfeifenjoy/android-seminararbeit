@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.LruCache;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,18 @@ public class ImageItem {
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy mm dd HH:mm:ss");
     public static final int THUMBNAIL_WIDTH = 50;
     public static final int THUMBNAIL_HEIGHT = 100;
+
+    private static final LruCache<String, Bitmap> cache;
+    static {
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 4;
+        cache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount() / 1024;
+            }
+        };
+    }
 
     public ImageItem(Context context, Date created, String name) {
         this.context = context;
@@ -47,13 +60,17 @@ public class ImageItem {
         return BitmapFactory.decodeFile(this.getFile().getAbsolutePath());
     }
     public Bitmap getThumbnail() {
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        final String file = getFile().getAbsolutePath();
-        BitmapFactory.decodeFile(file, options);
-        options.inSampleSize = getInSampleSize(options, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(file, options);
+        if(cache.get(this.name) == null) {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            final String file = getFile().getAbsolutePath();
+            BitmapFactory.decodeFile(file, options);
+            options.inSampleSize = getInSampleSize(options, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
+            options.inJustDecodeBounds = false;
+            Bitmap thumbnail = BitmapFactory.decodeFile(file, options);
+            cache.put(this.name, thumbnail);
+            return thumbnail;
+        } else return cache.get(this.name);
     }
 
     private int getInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
