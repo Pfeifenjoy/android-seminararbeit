@@ -3,6 +3,7 @@ package org.dhbw.arwed_dominic.piccer;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -47,7 +49,42 @@ public class ImageItemAdapter extends CursorAdapter {
         ImageItem imageItem = new ImageItem(context, created, name);
         tvCreationDate.setText(imageItem.getCreated());
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.imgProgressbar);
-        new ImageLoader(ivThumbnail, imageItem, progressBar).execute();
+
+        if(cancelPotentialWork(ivThumbnail.getId(), ivThumbnail)) {
+            final ImageLoader imageLoader = new ImageLoader(ivThumbnail, imageItem, progressBar);
+            final AsyncDrawable asyncDrawable = new AsyncDrawable(context.getResources(), null, imageLoader);
+            ivThumbnail.setImageDrawable(asyncDrawable);
+            imageLoader.execute(ivThumbnail.getId());
+        }
+
+
+    }
+    public static boolean cancelPotentialWork(int data, ImageView imageView) {
+        final ImageLoader imageLoader = getImageLoader(imageView);
+
+        if (imageLoader != null) {
+            final int bitmapData = imageLoader.data;
+            // If bitmapData is not yet set or it differs from the new data
+            if (bitmapData == 0 || bitmapData != data) {
+                // Cancel previous task
+                imageLoader.cancel(true);
+            } else {
+                // The same work is already in progress
+                return false;
+            }
+        }
+        // No task associated with the ImageView, or an existing task was cancelled
+        return true;
+    }
+    private static ImageLoader getImageLoader(ImageView imageView) {
+       if (imageView != null) {
+           final Drawable drawable = imageView.getDrawable();
+           if (drawable instanceof AsyncDrawable) {
+               final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
+               return asyncDrawable.getBitmapWorkerTask();
+           }
+        }
+        return null;
     }
 
 }

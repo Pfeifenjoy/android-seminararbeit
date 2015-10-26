@@ -1,7 +1,6 @@
 package org.dhbw.arwed_dominic.piccer;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -20,8 +19,8 @@ public class ImageItem {
     private Context context;
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy mm dd HH:mm:ss");
-    public static final int THUMBNAIL_WIDTH = 100;
-    public static final int THUMBNAIL_HEIGHT = 150;
+    public static final int THUMBNAIL_WIDTH = 50;
+    public static final int THUMBNAIL_HEIGHT = 100;
 
     public ImageItem(Context context, Date created, String name) {
         this.context = context;
@@ -48,9 +47,37 @@ public class ImageItem {
         return BitmapFactory.decodeFile(this.getFile().getAbsolutePath());
     }
     public Bitmap getThumbnail() {
-        Bitmap bigImage = BitmapFactory.decodeFile(this.getFile().getAbsolutePath());
-        return Bitmap.createScaledBitmap(bigImage, 100, 150, false);
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        final String file = getFile().getAbsolutePath();
+        BitmapFactory.decodeFile(file, options);
+        options.inSampleSize = getInSampleSize(options, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(file, options);
     }
+
+    private int getInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
     public File getFile() {
         this.file = this.file == null ?
                 new File(this.context.getExternalFilesDir("img"), this.name) : this.file;

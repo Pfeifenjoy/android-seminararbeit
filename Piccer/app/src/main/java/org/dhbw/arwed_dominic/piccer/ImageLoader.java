@@ -6,46 +6,56 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import java.lang.ref.WeakReference;
+
 
 /**
  * Created by arwed on 25.10.15.
  */
-public class ImageLoader extends AsyncTask<Object, Void, Bitmap> {
-    private ImageView imageView;
-    private ImageItem imageItem;
-    private String path;
-    private ProgressBar progressBar;
+public class ImageLoader extends AsyncTask<Integer, Void, Bitmap> {
+    private final WeakReference<ImageView> imageViewReference;
+    private final WeakReference<ProgressBar> progressBarWeakReference;
+    private final ImageItem imageItem;
+    public int data;
 
     public ImageLoader(ImageView imageView, ImageItem imageItem, ProgressBar progressBar) {
-        this.imageView = imageView;
+        this.imageViewReference = new WeakReference<ImageView>(imageView);
         this.imageItem = imageItem;
-        this.progressBar = progressBar;
-        //this.path = imageView.getTag().toString();
+        this.progressBarWeakReference = new WeakReference<ProgressBar>(progressBar);
     }
 
     @Override
-    protected Bitmap doInBackground(Object... params) {
-        Bitmap bitmap = imageItem.getThumbnail();
+    protected Bitmap doInBackground(Integer... params) {
+        this.data = params[0];
+        final Bitmap bitmap = this.imageItem.getThumbnail();
         return bitmap;
     }
 
     @Override
     protected void onPostExecute(Bitmap result) {
-//        if(!imageView.getTag().toString().equals(this.path)) {
-//            return;
-//        }
-        if(result != null && imageView != null) {
-            progressBar.setVisibility(View.GONE);
-            imageView.setVisibility(View.VISIBLE);
-            imageView.setImageBitmap(result);
-        } else {
-            imageView.setVisibility(View.GONE);
+        if(isCancelled()) return;
+        if(result != null && this.imageViewReference != null) {
+            final ImageView imageView = imageViewReference.get();
+            if(imageView != null) {
+                imageView.setImageBitmap(result);
+                imageView.setVisibility(View.VISIBLE);
+            }
+            final ProgressBar progressBar = progressBarWeakReference.get();
+            if(progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+            }
         }
     }
 
     @Override
     protected void onPreExecute() {
-        this.imageView.setVisibility(View.GONE);
-        this.progressBar.setVisibility(View.VISIBLE);
+        final ImageView imageView = imageViewReference.get();
+        if(imageView != null) {
+            imageView.setVisibility(View.GONE);
+        }
+        final ProgressBar progressBar = progressBarWeakReference.get();
+        if(progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
     }
 }
