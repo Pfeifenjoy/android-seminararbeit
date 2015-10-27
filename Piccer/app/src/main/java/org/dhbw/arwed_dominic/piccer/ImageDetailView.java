@@ -66,8 +66,12 @@ public class ImageDetailView extends Activity {
         PiccerDatabaseHandler piccerDatabaseHandler = new PiccerDatabaseHandler(this);
         ImageItem imageItem = piccerDatabaseHandler.getImage(this, id);
         contentView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        contentView.setImageURI(imageItem.getImageUri());
-
+        try {
+            contentView.setImageURI(imageItem.getImageUri());
+        }
+        catch (OutOfMemoryError e){
+            contentView.setImageBitmap(imageItem.getImage(500,500));
+        }
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
         mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
