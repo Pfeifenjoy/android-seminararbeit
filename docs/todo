@@ -21,7 +21,7 @@
 | 70.1 | entscheiden ob nur text gesucht wird oder eher     | 3    |         | 0%     |
 |      | ein Datepicker eingebaut werden soll.              |      |         |        |
 |------+----------------------------------------------------+------+---------+--------|
-| 80   | Aktualisieren der Liste nach aufnehmen von Bild    | must |         | 0%     |
+| 80   | Aktualisieren der Liste nach aufnehmen von Bild    | must |         | 100%   |
 |------+----------------------------------------------------+------+---------+--------|
 | 90   | Löschfunktion                                      | must |         | 0%     |
 |------+----------------------------------------------------+------+---------+--------|
