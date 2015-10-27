@@ -21,6 +21,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
     public static final int REQUEST_CAMERA = 0;
     public static final String IMAGE_LIST_STATE = "imageList";
+    public static final String CLICKED_IMAGE = "clickedImage";
 
     private ListView mainImageList;
     private ImageItemAdapter adapter;
@@ -38,11 +39,13 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         this.adapter = new ImageItemAdapter(this, handler.getImageTableCursor(), 0);
         mainImageList = (ListView)findViewById(R.id.mainImageList);
         mainImageList.setAdapter(adapter);
+        mainImageList.setOnItemClickListener(this);
 
         if(savedInstanceState != null) {
             Parcelable state = savedInstanceState.getParcelable(IMAGE_LIST_STATE);
             mainImageList.onRestoreInstanceState(state);
         }
+
     }
 
     @Override
@@ -99,6 +102,8 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        Intent detailView = new Intent(this, ImageDetailView.class);
+        detailView.putExtra(CLICKED_IMAGE, "" + id);
+        startActivity(detailView);
     }
 }

@@ -7,13 +7,14 @@ import android.net.Uri;
 import android.util.LruCache;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by arwed on 24.10.15.
  */
-public class ImageItem {
+public class ImageItem implements Serializable {
     private Date created;
     private File file;
     private String name;

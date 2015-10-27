@@ -52,7 +52,7 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
         return c;
     }
 
-    public ImageItem getImage(Context context, int id) throws Resources.NotFoundException {
+    public ImageItem getImage(Context context, long id) throws Resources.NotFoundException {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + TABLE_IMAGES + " WHERE _id = " + id + ";", null);
         if(c.getCount() <= 0) throw new Resources.NotFoundException("Could not find database entry of image.");
