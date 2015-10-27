@@ -3,10 +3,13 @@ package org.dhbw.arwed_dominic.piccer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapRegionDecoder;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.util.LruCache;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -76,6 +79,37 @@ public class ImageItem implements Serializable {
             cache.put(this.name, thumbnail);
             return thumbnail;
         } else return cache.get(this.name);
+    }
+
+    /**
+     * Loads a Thumbnail for the image item.
+     * This method only return a part, which is cropped at the y axis, of the image.
+     * @param width {Integer}
+     * @param height {Integer}
+     * @param offset {Double} The factor which will be cropped at the buttom and at the top.
+     * @return {Bitmap}
+     */
+    public Bitmap getThumbnail(int width, int height, double offset) {
+        if(cache.get(this.name) == null) {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            final String file = getFile().getAbsolutePath();
+            try {
+                options.inJustDecodeBounds = true;
+                BitmapRegionDecoder bitmapRegionDecoder = BitmapRegionDecoder.newInstance(file, false);
+                final int y = bitmapRegionDecoder.getHeight();
+                final int x = bitmapRegionDecoder.getWidth();
+                final Rect rect = new Rect(0, (int) (offset * y), x, (int) (y - offset * y));
+                bitmapRegionDecoder.decodeRegion(rect, options);
+                options.inSampleSize = getInSampleSize(options, width, height);
+                options.inJustDecodeBounds = false;
+                Bitmap thumbnail = bitmapRegionDecoder.decodeRegion(rect, options);
+                cache.put(this.name, thumbnail);
+                return thumbnail;
+            } catch (IOException e) {
+            } //TODO create image if it fails.
+        } else return cache.get(this.name);
+
+        return null;
     }
 
     private int getInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {

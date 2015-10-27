@@ -1,6 +1,7 @@
 package org.dhbw.arwed_dominic.piccer;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapRegionDecoder;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,7 +27,7 @@ public class ImageThumbnailLoader extends AsyncTask<Integer, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(Integer... params) {
         this.data = params[0];
-        final Bitmap bitmap = this.imageItem.getThumbnail(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
+        final Bitmap bitmap = this.imageItem.getThumbnail(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, 0.38);
         return bitmap;
     }
 
