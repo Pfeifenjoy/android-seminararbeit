@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import java.lang.ref.WeakReference;
 
@@ -12,14 +11,14 @@ import java.lang.ref.WeakReference;
 /**
  * Created by arwed on 25.10.15.
  */
-public class ImageLoader extends AsyncTask<Integer, Void, Bitmap> {
+public class ImageThumbnailLoader extends AsyncTask<Integer, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;
     private final ImageItem imageItem;
     public int data;
     public static int THUMBNAIL_WIDTH = 200;
     public static int THUMBNAIL_HEIGHT = 200;
 
-    public ImageLoader(ImageView imageView, ImageItem imageItem) {
+    public ImageThumbnailLoader(ImageView imageView, ImageItem imageItem) {
         this.imageViewReference = new WeakReference<ImageView>(imageView);
         this.imageItem = imageItem;
     }

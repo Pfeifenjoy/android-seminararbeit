@@ -10,14 +10,14 @@ import java.lang.ref.WeakReference;
  * Created by arwed on 26.10.15.
  */
 class AsyncDrawable extends BitmapDrawable {
-    private final WeakReference<ImageLoader> imageItemWeakReference;
+    private final WeakReference<ImageThumbnailLoader> imageItemWeakReference;
 
-    public AsyncDrawable(Resources res, Bitmap bitmap, ImageLoader imageLoader) {
+    public AsyncDrawable(Resources res, Bitmap bitmap, ImageThumbnailLoader imageThumbnailLoader) {
         super(res, bitmap);
-        this.imageItemWeakReference = new WeakReference<ImageLoader>(imageLoader);
+        this.imageItemWeakReference = new WeakReference<ImageThumbnailLoader>(imageThumbnailLoader);
     }
 
-    public ImageLoader getBitmapWorkerTask() {
+    public ImageThumbnailLoader getBitmapWorkerTask() {
         return this.imageItemWeakReference.get();
     }
 }

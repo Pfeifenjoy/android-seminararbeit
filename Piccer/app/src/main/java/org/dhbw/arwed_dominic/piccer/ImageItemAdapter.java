@@ -2,19 +2,15 @@ package org.dhbw.arwed_dominic.piccer;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -52,23 +48,23 @@ public class ImageItemAdapter extends CursorAdapter {
         tvCreationDate.setText(imageItem.getCreated());
 
         if(cancelPotentialWork(ivThumbnail.getId(), ivThumbnail)) {
-            final ImageLoader imageLoader = new ImageLoader(ivThumbnail, imageItem);
-            final AsyncDrawable asyncDrawable = new AsyncDrawable(context.getResources(), null, imageLoader);
+            final ImageThumbnailLoader imageThumbnailLoader = new ImageThumbnailLoader(ivThumbnail, imageItem);
+            final AsyncDrawable asyncDrawable = new AsyncDrawable(context.getResources(), null, imageThumbnailLoader);
             ivThumbnail.setImageDrawable(asyncDrawable);
-            imageLoader.execute(ivThumbnail.getId());
+            imageThumbnailLoader.execute(ivThumbnail.getId());
         }
 
 
     }
     public static boolean cancelPotentialWork(int data, ImageView imageView) {
-        final ImageLoader imageLoader = getImageLoader(imageView);
+        final ImageThumbnailLoader imageThumbnailLoader = getImageLoader(imageView);
 
-        if (imageLoader != null) {
-            final int bitmapData = imageLoader.data;
+        if (imageThumbnailLoader != null) {
+            final int bitmapData = imageThumbnailLoader.data;
             // If bitmapData is not yet set or it differs from the new data
             if (bitmapData == 0 || bitmapData != data) {
                 // Cancel previous task
-                imageLoader.cancel(true);
+                imageThumbnailLoader.cancel(true);
             } else {
                 // The same work is already in progress
                 return false;
@@ -77,7 +73,7 @@ public class ImageItemAdapter extends CursorAdapter {
         // No task associated with the ImageView, or an existing task was cancelled
         return true;
     }
-    private static ImageLoader getImageLoader(ImageView imageView) {
+    private static ImageThumbnailLoader getImageLoader(ImageView imageView) {
        if (imageView != null) {
            final Drawable drawable = imageView.getDrawable();
            if (drawable instanceof AsyncDrawable) {
