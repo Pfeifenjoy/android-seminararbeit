@@ -26,7 +26,7 @@ public class Piccer extends AppCompatActivity {
     private ListView mainImageList;
     private ImageItemAdapter adapter;
     private PiccerDatabaseHandler handler;
-    private ImageItem tmpImage;
+    private static ImageItem tmpImage;
 
 
     @Override
