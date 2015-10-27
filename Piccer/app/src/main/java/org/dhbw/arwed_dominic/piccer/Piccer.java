@@ -91,6 +91,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
             this.tmpImage.updateCreated();
             this.handler.addImage(this.tmpImage);
             this.adapter.changeCursor(this.handler.getImageTableCursor());
+            this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
         }
     }
 
