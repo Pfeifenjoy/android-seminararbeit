@@ -105,4 +105,8 @@ public class ImageItemAdapter extends CursorAdapter {
         return !selected.isEmpty();
     }
 
+    public Set<Long> getSelectedImageIds() {
+        return selected;
+    }
+
 }

@@ -8,9 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by arwed on 25.10.15.
@@ -26,8 +28,11 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
     public static final String DATE = "date";
     public static final String PATH = "path";
 
+    private final Context context;
+
     public PiccerDatabaseHandler(Context context) {
         super(context, DBNAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -64,6 +69,7 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
         } catch (ParseException e) {}
         String name = c.getString(c.getColumnIndex(PATH));
 
+        db.close();
         return new ImageItem(context, date, name);
     }
 
@@ -76,4 +82,29 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void deleteImage(long imageId) {
+    }
+
+    public void deleteImages(Set<Long> imageIds) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + PATH + " FROM " + TABLE_IMAGES
+                + " WHERE _id in (";
+        String subquery = "";
+        for(long id : imageIds) {
+            subquery += id + ", ";
+        }
+        subquery = subquery.substring(0, subquery.length() - 2);
+        query += subquery;
+        query += ")";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        do {
+
+            File file = new File(this.context.getExternalFilesDir("img"), c.getString(c.getColumnIndex(PATH)));
+            file.delete();
+        } while (c.moveToNext());
+        query = "DELETE FROM " + TABLE_IMAGES + " WHERE _id in (" + subquery + ")";
+        db.execSQL(query);
+        db.close();
+    }
 }

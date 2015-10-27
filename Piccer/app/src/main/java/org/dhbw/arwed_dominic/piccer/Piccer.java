@@ -51,7 +51,6 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_piccer, menu);
         this.menu = menu;
         return true;
@@ -59,10 +58,14 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
+        switch (item.getItemId()) {
+            case R.id.delete_item:
+                this.handler.deleteImages(this.adapter.getSelectedImageIds());
+                this.adapter.changeCursor(this.handler.getImageTableCursor());
+                this.adapter.notifyDataSetChanged();
+                break;
+            case R.id.share_item: break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
