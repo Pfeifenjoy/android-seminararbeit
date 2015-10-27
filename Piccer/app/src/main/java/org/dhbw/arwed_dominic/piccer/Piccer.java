@@ -3,10 +3,9 @@ package org.dhbw.arwed_dominic.piccer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
-import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,7 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class Piccer extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class Piccer extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     public static final int REQUEST_CAMERA = 0;
     public static final String IMAGE_LIST_STATE = "imageList";
@@ -40,6 +39,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         mainImageList = (ListView)findViewById(R.id.mainImageList);
         mainImageList.setAdapter(adapter);
         mainImageList.setOnItemClickListener(this);
+        mainImageList.setOnItemLongClickListener(this);
 
         if(savedInstanceState != null) {
             Parcelable state = savedInstanceState.getParcelable(IMAGE_LIST_STATE);
@@ -106,5 +106,11 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         Intent detailView = new Intent(this, ImageDetailView.class);
         detailView.putExtra(CLICKED_IMAGE, "" + id);
         startActivity(detailView);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        this.adapter.toggleSelectForItem(id);
+        return true;
     }
 }

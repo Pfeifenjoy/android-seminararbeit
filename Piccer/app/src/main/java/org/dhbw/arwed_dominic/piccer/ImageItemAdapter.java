@@ -3,6 +3,7 @@ package org.dhbw.arwed_dominic.piccer;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -25,6 +29,7 @@ public class ImageItemAdapter extends CursorAdapter {
         this.context = context;
     }
 
+    private Set<Long> selected = new HashSet<Long>();
 
 
     @Override
@@ -43,6 +48,10 @@ public class ImageItemAdapter extends CursorAdapter {
         } catch (ParseException e) {
 
         }
+        long id = cursor.getLong(cursor.getColumnIndex("_id"));
+        if(selected.contains(id))
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.black_overlay));
+        else view.setBackgroundColor(0);
         String name = cursor.getString(cursor.getColumnIndex(PiccerDatabaseHandler.PATH));
         ImageItem imageItem = new ImageItem(context, created, name);
         tvCreationDate.setText(imageItem.getCreated());
@@ -82,6 +91,12 @@ public class ImageItemAdapter extends CursorAdapter {
            }
         }
         return null;
+    }
+
+    public void toggleSelectForItem(long id) {
+        if(selected.contains(id)) selected.remove(id);
+        else selected.add(id);
+        notifyDataSetChanged();
     }
 
 }
