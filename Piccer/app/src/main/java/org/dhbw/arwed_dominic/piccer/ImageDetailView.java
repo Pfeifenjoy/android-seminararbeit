@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ViewAnimator;
 
@@ -60,18 +61,16 @@ public class ImageDetailView extends Activity {
         setupActionBar();
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
-        final ImageView contentView = (ImageView) findViewById(R.id.fullscreenImageView);
+        final WebView contentView = (WebView) findViewById(R.id.fullscreenImageView);
 
         long id = Long.parseLong(getIntent().getStringExtra(Piccer.CLICKED_IMAGE));
         PiccerDatabaseHandler piccerDatabaseHandler = new PiccerDatabaseHandler(this);
         ImageItem imageItem = piccerDatabaseHandler.getImage(this, id);
-        contentView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        try {
-            contentView.setImageURI(imageItem.getImageUri());
-        }
-        catch (OutOfMemoryError e){
-            contentView.setImageBitmap(imageItem.getImage(500,500));
-        }
+        contentView.getSettings().setLoadWithOverviewMode(true);
+        contentView.getSettings().setUseWideViewPort(true);
+        contentView.getSettings().setBuiltInZoomControls(true);
+        contentView.getSettings().setDisplayZoomControls(false);
+        contentView.loadUrl("file://img/" + imageItem.getFile().getAbsolutePath());
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
         mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
