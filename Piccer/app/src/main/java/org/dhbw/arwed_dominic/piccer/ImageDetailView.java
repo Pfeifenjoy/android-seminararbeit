@@ -4,6 +4,7 @@ import org.dhbw.arwed_dominic.piccer.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.graphics.BitmapRegionDecoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.widget.ImageView;
+import android.widget.ViewAnimator;
 
 import java.io.Serializable;
 
@@ -63,7 +65,8 @@ public class ImageDetailView extends Activity {
         long id = Long.parseLong(getIntent().getStringExtra(Piccer.CLICKED_IMAGE));
         PiccerDatabaseHandler piccerDatabaseHandler = new PiccerDatabaseHandler(this);
         ImageItem imageItem = piccerDatabaseHandler.getImage(this, id);
-        contentView.setImageBitmap(imageItem.getThumbnail(400, 400));
+        contentView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        contentView.setImageURI(imageItem.getImageUri());
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.

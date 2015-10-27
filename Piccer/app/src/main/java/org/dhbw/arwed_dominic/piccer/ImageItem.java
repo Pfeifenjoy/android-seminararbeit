@@ -55,8 +55,14 @@ public class ImageItem implements Serializable {
     public Uri getImageUri() {
         return Uri.fromFile(getFile());
     }
-    public Bitmap getImage() {
-        return BitmapFactory.decodeFile(this.getFile().getAbsolutePath());
+    public Bitmap getImage(int width, int height) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        final String file = getFile().getAbsolutePath();
+        BitmapFactory.decodeFile(file, options);
+        options.inSampleSize = getInSampleSize(options, width, height);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(file, options);
     }
     public Bitmap getThumbnail(int width, int height) {
         if(cache.get(this.name) == null) {
@@ -99,6 +105,7 @@ public class ImageItem implements Serializable {
                 new File(this.context.getExternalFilesDir("img"), this.name) : this.file;
         return this.file;
     }
+
 
     public String getName() {
         return this.name;
