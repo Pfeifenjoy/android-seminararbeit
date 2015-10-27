@@ -93,10 +93,16 @@ public class ImageItemAdapter extends CursorAdapter {
         return null;
     }
 
-    public void toggleSelectForItem(long id) {
-        if(selected.contains(id)) selected.remove(id);
-        else selected.add(id);
-        notifyDataSetChanged();
+    public boolean toggleSelectForItem(Context context, long id, View view) {
+        if(selected.contains(id)) {
+            selected.remove(id);
+            view.setBackgroundColor(0);
+        }
+        else {
+            selected.add(id);
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.black_overlay));
+        }
+        return !selected.isEmpty();
     }
 
 }
