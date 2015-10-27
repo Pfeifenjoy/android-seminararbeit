@@ -20,7 +20,7 @@ public class ImageItem implements Serializable {
     private String name;
     private Context context;
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy mm dd HH:mm:ss");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
 
     private static final LruCache<String, Bitmap> cache;
     static {
