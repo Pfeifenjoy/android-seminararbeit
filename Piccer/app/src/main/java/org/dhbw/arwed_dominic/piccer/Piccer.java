@@ -15,8 +15,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.util.Date;
 
 public class Piccer extends AppCompatActivity {
 
@@ -88,7 +86,7 @@ public class Piccer extends AppCompatActivity {
         if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK) {
             this.tmpImage.updateCreated();
             this.handler.addImage(this.tmpImage);
-            this.adapter.notifyDataSetChanged();
+            this.adapter.changeCursor(this.handler.getImageTableCursor());
         }
     }
 

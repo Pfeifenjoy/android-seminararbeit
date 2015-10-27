@@ -43,7 +43,6 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
     public Cursor getImageTableCursor() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + TABLE_IMAGES + ";", null);
-
         return c;
     }
 
