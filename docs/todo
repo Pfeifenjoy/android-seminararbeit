@@ -9,13 +9,13 @@
 | 30   | Cachen der Bilder um eine bessere Performance      | 6    | Arwed   | 100%   |
 |      | zu erhalten.                                       |      |         |        |
 |------+----------------------------------------------------+------+---------+--------|
-| 40   | Detailansicht der Bilder erstellen.                | must |         | 0%     |
+| 40   | Detailansicht der Bilder erstellen.                | must |         | 70%    |
 |------+----------------------------------------------------+------+---------+--------|
-| 50   | Layout der ListItems anpassen.                     | must | Dominic | 30%    |
-| 50.1 | Ladeanimation überarbeiten.                        | 8    |         | 0%     |
+| 50   | Layout der ListItems anpassen.                     | must | Dominic | 80%    |
+| 50.1 | Ladeanimation überarbeiten.                        | 8    |         | 100%   |
 | 50.2 | Datumsformat überarbeiten.                         | must |         | 0%     |
 |------+----------------------------------------------------+------+---------+--------|
-| 60   | Icon erstellen.                                    | must |         | 0%     |
+| 60   | Icon erstellen.                                    | must |         | 100%   |
 |------+----------------------------------------------------+------+---------+--------|
 | 70   | Suche erstellen                                    | 3    |         | 0%     |
 | 70.1 | entscheiden ob nur text gesucht wird oder eher     | 3    |         | 0%     |
@@ -23,7 +23,7 @@
 |------+----------------------------------------------------+------+---------+--------|
 | 80   | Aktualisieren der Liste nach aufnehmen von Bild    | must |         | 100%   |
 |------+----------------------------------------------------+------+---------+--------|
-| 90   | Löschfunktion                                      | must |         | 0%     |
+| 90   | Löschfunktion                                      | must |         | 100%   |
 |------+----------------------------------------------------+------+---------+--------|
 | 100  | Bug zweites bild vertikal                          | must |         | 100%   |
 |------+----------------------------------------------------+------+---------+--------|
