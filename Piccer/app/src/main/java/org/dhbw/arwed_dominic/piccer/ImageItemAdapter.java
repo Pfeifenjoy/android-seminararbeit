@@ -29,6 +29,8 @@ public class ImageItemAdapter extends CursorAdapter {
         this.context = context;
     }
 
+
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.image_item, parent, false);
