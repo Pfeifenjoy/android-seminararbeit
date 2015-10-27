@@ -12,11 +12,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class Piccer extends AppCompatActivity {
+public class Piccer extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     public static final int REQUEST_CAMERA = 0;
     public static final String IMAGE_LIST_STATE = "imageList";
@@ -96,4 +97,8 @@ public class Piccer extends AppCompatActivity {
         outState.putParcelable(IMAGE_LIST_STATE, mainImageList.onSaveInstanceState());
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
 }

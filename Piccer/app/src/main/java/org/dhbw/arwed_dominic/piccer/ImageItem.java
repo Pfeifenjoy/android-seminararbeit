@@ -20,8 +20,6 @@ public class ImageItem {
     private Context context;
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy mm dd HH:mm:ss");
-    public static final int THUMBNAIL_WIDTH = 50;
-    public static final int THUMBNAIL_HEIGHT = 100;
 
     private static final LruCache<String, Bitmap> cache;
     static {
@@ -59,13 +57,13 @@ public class ImageItem {
     public Bitmap getImage() {
         return BitmapFactory.decodeFile(this.getFile().getAbsolutePath());
     }
-    public Bitmap getThumbnail() {
+    public Bitmap getThumbnail(int width, int height) {
         if(cache.get(this.name) == null) {
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             final String file = getFile().getAbsolutePath();
             BitmapFactory.decodeFile(file, options);
-            options.inSampleSize = getInSampleSize(options, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
+            options.inSampleSize = getInSampleSize(options, width, height);
             options.inJustDecodeBounds = false;
             Bitmap thumbnail = BitmapFactory.decodeFile(file, options);
             cache.put(this.name, thumbnail);

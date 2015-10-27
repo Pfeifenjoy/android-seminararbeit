@@ -14,20 +14,20 @@ import java.lang.ref.WeakReference;
  */
 public class ImageLoader extends AsyncTask<Integer, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;
-    private final WeakReference<ProgressBar> progressBarWeakReference;
     private final ImageItem imageItem;
     public int data;
+    public static int THUMBNAIL_WIDTH = 200;
+    public static int THUMBNAIL_HEIGHT = 200;
 
-    public ImageLoader(ImageView imageView, ImageItem imageItem, ProgressBar progressBar) {
+    public ImageLoader(ImageView imageView, ImageItem imageItem) {
         this.imageViewReference = new WeakReference<ImageView>(imageView);
         this.imageItem = imageItem;
-        this.progressBarWeakReference = new WeakReference<ProgressBar>(progressBar);
     }
 
     @Override
     protected Bitmap doInBackground(Integer... params) {
         this.data = params[0];
-        final Bitmap bitmap = this.imageItem.getThumbnail();
+        final Bitmap bitmap = this.imageItem.getThumbnail(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
         return bitmap;
     }
 
@@ -40,22 +40,10 @@ public class ImageLoader extends AsyncTask<Integer, Void, Bitmap> {
                 imageView.setImageBitmap(result);
                 imageView.setVisibility(View.VISIBLE);
             }
-            final ProgressBar progressBar = progressBarWeakReference.get();
-            if(progressBar != null) {
-                progressBar.setVisibility(View.GONE);
-            }
         }
     }
 
     @Override
     protected void onPreExecute() {
-        final ImageView imageView = imageViewReference.get();
-        if(imageView != null) {
-            imageView.setVisibility(View.GONE);
-        }
-        final ProgressBar progressBar = progressBarWeakReference.get();
-        if(progressBar != null) {
-            progressBar.setVisibility(View.VISIBLE);
-        }
     }
 }

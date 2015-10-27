@@ -48,10 +48,9 @@ public class ImageItemAdapter extends CursorAdapter {
         String name = cursor.getString(cursor.getColumnIndex(PiccerDatabaseHandler.PATH));
         ImageItem imageItem = new ImageItem(context, created, name);
         tvCreationDate.setText(imageItem.getCreated());
-        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.imgProgressbar);
 
         if(cancelPotentialWork(ivThumbnail.getId(), ivThumbnail)) {
-            final ImageLoader imageLoader = new ImageLoader(ivThumbnail, imageItem, progressBar);
+            final ImageLoader imageLoader = new ImageLoader(ivThumbnail, imageItem);
             final AsyncDrawable asyncDrawable = new AsyncDrawable(context.getResources(), null, imageLoader);
             ivThumbnail.setImageDrawable(asyncDrawable);
             imageLoader.execute(ivThumbnail.getId());
