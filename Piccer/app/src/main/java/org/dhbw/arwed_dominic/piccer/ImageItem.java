@@ -98,7 +98,9 @@ public class ImageItem implements Serializable {
                 BitmapRegionDecoder bitmapRegionDecoder = BitmapRegionDecoder.newInstance(file, false);
                 final int y = bitmapRegionDecoder.getHeight();
                 final int x = bitmapRegionDecoder.getWidth();
-                final Rect rect = new Rect(0, (int) (offset * y), x, (int) (y - offset * y));
+                final Rect rect = y > x ?
+                        new Rect(0, (int) (offset * y), x, (int) (y - offset * y))
+                        : new Rect(0, 0, x, y);
                 bitmapRegionDecoder.decodeRegion(rect, options);
                 options.inSampleSize = getInSampleSize(options, width, height);
                 options.inJustDecodeBounds = false;

@@ -105,10 +105,11 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         detailView.putExtra(CLICKED_IMAGE, "" + id);
         startActivity(detailView);
     }
+
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         this.menu.clear();
-        if(this.adapter.toggleSelectForItem(this, id, view)) {
+        if(this.adapter.toggleSelectForItem(id, view)) {
             getMenuInflater().inflate(R.menu.edit_main_image_list, this.menu);
         }
         else getMenuInflater().inflate(R.menu.menu_piccer, this.menu);
