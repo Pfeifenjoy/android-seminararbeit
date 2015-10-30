@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -70,7 +69,7 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
         String name = c.getString(c.getColumnIndex(PATH));
 
         db.close();
-        return new ImageItem(context, date, name);
+        return new ImageItem(context, date, name, id);
     }
 
     public void addImage(ImageItem imageItem) {

@@ -21,6 +21,7 @@ public class ImageItem implements Serializable {
     private Date created;
     private File file;
     private String name;
+    private long id;
     private Context context;
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
@@ -37,10 +38,11 @@ public class ImageItem implements Serializable {
         };
     }
 
-    public ImageItem(Context context, Date created, String name) {
+    public ImageItem(Context context, Date created, String name, long id) {
         this.context = context;
         this.name = name;
         this.created = created;
+        this.id = id;
     }
 
     public ImageItem(Context context) {
@@ -145,5 +147,9 @@ public class ImageItem implements Serializable {
 
     public String getName() {
         return this.name;
+    }
+
+    public long getId() {
+        return this.id;
     }
 }

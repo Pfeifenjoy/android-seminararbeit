@@ -78,7 +78,7 @@ public class ImageItemAdapter extends CursorAdapter {
             view.setBackgroundColor(ContextCompat.getColor(context, R.color.black_overlay));
         else view.setBackgroundColor(0);
         String name = cursor.getString(cursor.getColumnIndex(PiccerDatabaseHandler.PATH));
-        ImageItem imageItem = new ImageItem(context, created, name);
+        ImageItem imageItem = new ImageItem(context, created, name, id);
 
         if(cancelPotentialWork(ivThumbnail.getId(), ivThumbnail)) {
             final ImageThumbnailLoader imageThumbnailLoader =
