@@ -4,7 +4,9 @@ import org.dhbw.arwed_dominic.piccer.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.BitmapRegionDecoder;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ViewAnimator;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -52,6 +55,8 @@ public class ImageDetailView extends Activity {
      * The instance of the {@link SystemUiHider} for this activity.
      */
     private SystemUiHider mSystemUiHider;
+    private PiccerDatabaseHandler handler;
+    private ImageItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,10 @@ public class ImageDetailView extends Activity {
 
         setContentView(R.layout.activity_image_detail_view);
         setupActionBar();
+
+        this.handler = new PiccerDatabaseHandler(this);
+        this.adapter = new ImageItemAdapter(this,  handler.getImageTableCursor(), 0);
+
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final WebView contentView = (WebView) findViewById(R.id.fullscreenImageView);
@@ -201,5 +210,20 @@ public class ImageDetailView extends Activity {
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    public void sharePicture(View view) {
+
+        long id = Long.parseLong(getIntent().getStringExtra(Piccer.CLICKED_IMAGE));
+
+            ImageItem imageItem = this.handler.getImage(this, id);
+            Uri uriToImage = imageItem.getImageUri();
+
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_STREAM,uriToImage );
+            sendIntent.setType("image/png");
+            startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
+
     }
 }

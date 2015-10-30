@@ -3,6 +3,7 @@ package org.dhbw.arwed_dominic.piccer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.Set;
 
 
 public class Piccer extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
@@ -63,7 +66,19 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                 this.adapter.changeCursor(this.handler.getImageTableCursor());
                 this.adapter.notifyDataSetChanged();
                 break;
-            case R.id.share_item: break;
+            case R.id.share_item:
+                Set<Long> ids= this.adapter.getSelectedImageIds();
+
+                for (long id : ids) {
+                    ImageItem imageItem = this.handler.getImage(this, id);
+                    Uri uriToImage = imageItem.getImageUri();
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_STREAM,uriToImage );
+                    sendIntent.setType("image/png");
+                    startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

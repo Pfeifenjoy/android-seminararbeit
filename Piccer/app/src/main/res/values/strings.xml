@@ -5,7 +5,7 @@
     <string name="noCamera">Could not open the camera.</string>
 
     <string name="title_activity_image_detail_view">Details</string>
-    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_button">Share your Picture</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <string name="delete">Delete Items</string>
