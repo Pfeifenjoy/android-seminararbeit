@@ -1,33 +1,49 @@
-|------+----------------------------------------------------+------+---------+--------|
-| ID   | Beschreibung                                       | Prio | Wer     | Status |
-|------+----------------------------------------------------+------+---------+--------|
-| 10   | Berechnung der Speichergröße von bildern.          | 1    | Arwed   | 0%     |
-| 10.1 | Minimal Requirements in android maniest festlegen. | 1    | Arwed   | 0%     |
-|------+----------------------------------------------------+------+---------+--------|
-| 20   | Laden von Bildern aus der Galerie.                 | must |         | 0%     |
-|------+----------------------------------------------------+------+---------+--------|
-| 30   | Cachen der Bilder um eine bessere Performance      | 6    | Arwed   | 100%   |
-|      | zu erhalten.                                       |      |         |        |
-|------+----------------------------------------------------+------+---------+--------|
-| 40   | Detailansicht der Bilder erstellen.                | must |         | 70%    |
-|------+----------------------------------------------------+------+---------+--------|
-| 50   | Layout der ListItems anpassen.                     | must | Dominic | 80%    |
-| 50.1 | Ladeanimation überarbeiten.                        | 8    |         | 100%   |
-| 50.2 | Datumsformat überarbeiten.                         | must |         | 0%     |
-|------+----------------------------------------------------+------+---------+--------|
-| 60   | Icon erstellen.                                    | must |         | 100%   |
-|------+----------------------------------------------------+------+---------+--------|
-| 70   | Suche erstellen                                    | 3    |         | 0%     |
-| 70.1 | entscheiden ob nur text gesucht wird oder eher     | 3    |         | 0%     |
-|      | ein Datepicker eingebaut werden soll.              |      |         |        |
-|------+----------------------------------------------------+------+---------+--------|
-| 80   | Aktualisieren der Liste nach aufnehmen von Bild    | must |         | 100%   |
-|------+----------------------------------------------------+------+---------+--------|
-| 90   | Löschfunktion                                      | must |         | 100%   |
-|------+----------------------------------------------------+------+---------+--------|
-| 100  | Bug zweites bild vertikal                          | must |         | 100%   |
-|------+----------------------------------------------------+------+---------+--------|
-| 110  | Rotate Funktion im detail view.                    | 8    |         | 0%     |
-|------+----------------------------------------------------+------+---------+--------|
-| 120  | Bild als Email versenden.                          | must |         | 0%     |
-|------+----------------------------------------------------+------+---------+--------|
+|-------+-----------------------------------------------------+------+---------+--------|
+| ID    | Beschreibung                                        | Prio | Wer     | Status |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 10    | Berechnung der Speichergröße von bildern.           | 1    | Arwed   | 0%     |
+| 10.1  | Minimal Requirements in android maniest festlegen.  | 1    | Arwed   | 0%     |
+| 10.2  | Farbe des Layouts anpassen.                         | 1    | Arwed   | 0%     |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 20    | Laden von Bildern aus der Galerie.                  | must | Arwed   | 0%     |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 30    | Cachen der Bilder um eine bessere Performance       | 6    | Arwed   | 100%   |
+|       | zu erhalten.                                        |      |         |        |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 40    | Detailansicht der Bilder erstellen.                 | must |         | 70%    |
+| 40.1  | Detailbildansicht. ImageView Wiederherstellen.      | must | Arwed   | 0%     |
+| 40.3  | Swipe links / rechts -> nächstes bild.              | 2    |         | 0%     |
+| 40.4  | Zoom in Detailansicht.                              | 3    |         | 0%     |
+| 40.5  | Links rechts drehen im Image View                   | 3    |         | 0%     |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 50    | Layout der ListItems anpassen.                      | must | Dominic | 80%    |
+| 50.1  | Ladeanimation überarbeiten.                         | 8    |         | 100%   |
+| 50.2  | Datumsformat überarbeiten.                          | must |         | 0%     |
+| 50.3  | Ausrichtung bilder in Hauptlist.                    | 1    | Dominic | 0%     |
+| 50.4  | Toggle Button Liste sortieren.                      | 2    |         | 0%     |
+| 50.5  | Select bei Selection rückgängig machen.             | 1    |         | 0%     |
+| 50.6  | Listen Item Layout anpassen. Titel, Datum, Uhrzeit. | 1    | Dominic | 0%     |
+| 50.7  | Add Button neu designen.                            | 1    | Arwed   | 0%     |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 60    | Icon erstellen.                                     | must | Dominic | 100%   |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 70    | Suche erstellen                                     | 3    |         | 0%     |
+| 70.1  | entscheiden ob nur text gesucht wird oder eher      | 3    |         | 0%     |
+|       | ein Datepicker eingebaut werden soll.               |      |         |        |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 80    | Aktualisieren der Liste nach aufnehmen von Bild     | must | Arwed   | 100%   |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 90    | Löschfunktion                                       | must | Arwed   | 100%   |
+| 90.1  | Löschen in Einzelbild.                              | must | Dominic | 0%     |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 100   | Bug zweites bild vertikal                           | must | Arwed   | 100%   |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 110   | Rotate Funktion im detail view.                     | 8    |         | 0%     |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 120   | Share Funktion verbessern.                          | must | Dominic | 50%    |
+| 120.1 | Mehrere Bilder versenden.                           | must | Dominic | 0%     |
+|-------+-----------------------------------------------------+------+---------+--------|
+| 140   | Texte in deutsch aufarbeiten.                       | must |         | 0%     |
+|-------+-----------------------------------------------------+------+---------+--------|
+
+
