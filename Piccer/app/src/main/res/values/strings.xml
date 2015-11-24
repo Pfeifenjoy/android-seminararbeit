@@ -11,7 +11,7 @@
     <string name="delete">Delete Items</string>
     <string name="share">Share Items</string>
 
-    <string name="createdOn">Created On:</string>
-    <string name="at">at</string>
-    <string name="oClock">oClock</string>
+    <string name="createdOn">Datum:</string>
+    <string name="at">Titel:</string>
+    <string name="oClock">Uhr</string>
 </resources>
