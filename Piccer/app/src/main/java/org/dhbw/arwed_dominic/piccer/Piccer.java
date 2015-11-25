@@ -1,6 +1,8 @@
 package org.dhbw.arwed_dominic.piccer;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -8,13 +10,16 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 
@@ -68,16 +73,20 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                 break;
             case R.id.share_item:
                 Set<Long> ids= this.adapter.getSelectedImageIds();
+                ArrayList<Uri> imageUris = new ArrayList<>();
 
                 for (long id : ids) {
                     ImageItem imageItem = this.handler.getImage(this, id);
-                    Uri uriToImage = imageItem.getImageUri();
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_STREAM,uriToImage );
-                    sendIntent.setType("image/png");
-                    startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
+                    imageUris.add(imageItem.getImageUri());
                 }
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                sendIntent.putParcelableArrayListExtra(sendIntent.EXTRA_STREAM, imageUris);
+                sendIntent.putExtra(sendIntent.EXTRA_TEXT, "Von Piccer gesendet");
+                sendIntent.setType("image/*");
+                sendIntent.addFlags(sendIntent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -105,6 +114,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
             this.handler.addImage(this.tmpImage);
             this.adapter.changeCursor(this.handler.getImageTableCursor());
             this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
+            setImageTitle();
         }
     }
 
@@ -130,4 +140,34 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         else getMenuInflater().inflate(R.menu.menu_piccer, this.menu);
         return true;
     }
+
+    public void setImageTitle(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Wähle Title des Bildes");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected;
+        input.setInputType(InputType.TYPE_CLASS_TEXT );
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              String  mText = input.getText().toString();
+            }
+        });
+        builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+
 }

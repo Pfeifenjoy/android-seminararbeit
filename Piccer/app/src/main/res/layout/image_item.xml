@@ -82,11 +82,11 @@
         </LinearLayout>
 
     </LinearLayout>
-    <LinearLayout
+<!--    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="2dp"
         android:background="@color/black_overlay">
-    </LinearLayout>
+    </LinearLayout> -->
 
 
 </LinearLayout>
