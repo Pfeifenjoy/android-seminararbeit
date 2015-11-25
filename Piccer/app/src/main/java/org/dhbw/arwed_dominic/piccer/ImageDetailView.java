@@ -70,16 +70,15 @@ public class ImageDetailView extends Activity {
 
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
-        final WebView contentView = (WebView) findViewById(R.id.fullscreenImageView);
+        final ImageView contentView = (ImageView) findViewById(R.id.fullscreenImageView);
 
         long id = Long.parseLong(getIntent().getStringExtra(Piccer.CLICKED_IMAGE));
         PiccerDatabaseHandler piccerDatabaseHandler = new PiccerDatabaseHandler(this);
         ImageItem imageItem = piccerDatabaseHandler.getImage(this, id);
-        contentView.getSettings().setLoadWithOverviewMode(true);
-        contentView.getSettings().setUseWideViewPort(true);
-        contentView.getSettings().setBuiltInZoomControls(true);
-        contentView.getSettings().setDisplayZoomControls(false);
-        contentView.loadUrl("file://img/" + imageItem.getFile().getAbsolutePath());
+
+        contentView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        contentView.setImageURI(imageItem.getImageUri());
+
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
         mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);

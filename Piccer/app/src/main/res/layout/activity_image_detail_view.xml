@@ -4,7 +4,7 @@
     tools:context="org.dhbw.arwed_dominic.piccer.ImageDetailView">
 
 
-    <WebView
+    <ImageView
         android:id="@+id/fullscreenImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
