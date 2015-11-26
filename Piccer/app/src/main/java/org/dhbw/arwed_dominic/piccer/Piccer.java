@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
@@ -69,6 +70,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Set<Long> ids= this.adapter.getSelectedImageIds();
         switch (item.getItemId()) {
             case R.id.delete_item:
                 this.handler.deleteImages(this.adapter.getSelectedImageIds());
@@ -76,7 +78,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                 this.adapter.notifyDataSetChanged();
                 break;
             case R.id.share_item:
-                Set<Long> ids= this.adapter.getSelectedImageIds();
+
                 ArrayList<Uri> imageUris = new ArrayList<>();
 
                 for (long id : ids) {
@@ -92,6 +94,29 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                 sendIntent.addFlags(sendIntent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
                 break;
+
+            case R.id.saveToGallery:
+                //Include all selected images in the system gallery Folder: Camera
+
+                for (long id : ids) {
+                    try {
+                        ImageItem imageItem = this.handler.getImage(this, id);
+                        File file = imageItem.getFile();
+
+                        MediaStore.Images.Media.insertImage(getContentResolver(), file.getPath(), file.getName(), "Powered by PhotoHub");
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        Uri contentUri = Uri.fromFile(file);
+                        mediaScanIntent.setData(contentUri);
+                        sendBroadcast(mediaScanIntent);
+                    } catch (FileNotFoundException e) {
+                        Toast.makeText(getBaseContext(), "Bild konnte nicht hinzugefügt werden", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                Toast.makeText(getBaseContext(), " Bilder der Galerie hinzugefügt", Toast.LENGTH_SHORT).show();
+
+                return true;
+
         }
         this.adapter.clearSelect();
         return super.onOptionsItemSelected(item);

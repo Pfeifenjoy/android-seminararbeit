@@ -18,5 +18,7 @@
     <string name="abort">Abbrechen</string>
     <string name="pleaseSelectName">Wähle Title des Bildes</string>
 
+    <string name="saveToGallery">In Gallerie speichern</string>
+
     <string name="sendMessage">Von Piccer gesendet</string>
 </resources>
