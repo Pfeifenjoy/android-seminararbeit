@@ -103,7 +103,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                         ImageItem imageItem = this.handler.getImage(this, id);
                         File file = imageItem.getFile();
 
-                        MediaStore.Images.Media.insertImage(getContentResolver(), file.getPath(), file.getName(), "Powered by PhotoHub");
+                        MediaStore.Images.Media.insertImage(getContentResolver(), file.getPath(), file.getName(), "Created by Piccer");
                         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                         Uri contentUri = Uri.fromFile(file);
                         mediaScanIntent.setData(contentUri);
