@@ -59,6 +59,7 @@ public class ImageDetailView extends Activity {
     private SystemUiHider mSystemUiHider;
     private PiccerDatabaseHandler handler;
     private ImageItemAdapter adapter;
+    private ImageView contentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class ImageDetailView extends Activity {
 
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
-        final ImageView contentView = (ImageView) findViewById(R.id.fullscreenImageView);
+        contentView = (ImageView) findViewById(R.id.fullscreenImageView);
 
         long id = Long.parseLong(getIntent().getStringExtra(Piccer.CLICKED_IMAGE));
         PiccerDatabaseHandler piccerDatabaseHandler = new PiccerDatabaseHandler(this);
@@ -227,5 +228,11 @@ public class ImageDetailView extends Activity {
             sendIntent.setType("image/png");
             startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        System.gc();
     }
 }
