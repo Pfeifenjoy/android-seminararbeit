@@ -119,30 +119,6 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK ) {
-            this.tmpImage.updateCreated();
-            File file = this.tmpImage.getFile();
-            int rotation = 0;
-            try {
-                ExifInterface exif = new ExifInterface(file.getAbsolutePath());
-                rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-                switch(rotation){
-                    case ExifInterface.ORIENTATION_ROTATE_270:
-                        rotation = 270;
-
-                        break;
-                    case ExifInterface.ORIENTATION_ROTATE_180:
-                        rotation = 180;
-                        break;
-                    case ExifInterface.ORIENTATION_ROTATE_90:
-                        rotation = 90;
-                        break;
-                }
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             addImage(this.tmpImage);
 
         }
@@ -154,8 +130,34 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     }
 
     private void saveImage(ImageItem imageItem) {
-        AsyncRotator rotator = new AsyncRotator(this, imageItem, 90, adapter);
-        rotator.execute(imageItem.getFile());
+        this.tmpImage.updateCreated();
+        File file = this.tmpImage.getFile();
+        int rotation = 0;
+        try {
+            ExifInterface exif = new ExifInterface(file.getAbsolutePath());
+            rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+            switch(rotation){
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotation = 270;
+
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotation = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotation = 90;
+                    break;
+            }
+
+            if(rotation != 0) {
+                AsyncRotator rotator = new AsyncRotator(this, imageItem, rotation, adapter);
+                rotator.execute(imageItem.getFile());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.handler.addImage(imageItem);
         this.adapter.changeCursor(this.handler.getImageTableCursor());
         this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
