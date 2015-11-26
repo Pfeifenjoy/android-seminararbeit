@@ -38,7 +38,7 @@ public class ImageItem implements Serializable {
     private long id;
     private Context context;
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy MM dd hh:mm:ss");
 
     private static final LruCache<String, Bitmap> cache;
     static {
