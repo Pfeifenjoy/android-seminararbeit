@@ -127,6 +127,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     }
 
     private void saveImage(ImageItem imageItem) {
+        imageItem.rotate(90);
         this.handler.addImage(imageItem);
         this.adapter.changeCursor(this.handler.getImageTableCursor());
         this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));

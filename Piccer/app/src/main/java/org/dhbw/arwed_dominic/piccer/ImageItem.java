@@ -72,6 +72,9 @@ public class ImageItem implements Serializable {
                 out.write(buffer);
             } while (in.read(buffer) != -1);
 
+            if(cache.get(this.name) != null) {
+                cache.remove(this.name);
+            }
         } catch (FileNotFoundException e) {
             //TODO
             Log.e("Piccer", "error", e);
@@ -220,7 +223,9 @@ public class ImageItem implements Serializable {
         try {
             out = new FileOutputStream(getFile());
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-
+            if(cache.get(this.name) != null) {
+                cache.remove(this.name);
+            }
         } catch (IOException e) {
             //TODO
         }
