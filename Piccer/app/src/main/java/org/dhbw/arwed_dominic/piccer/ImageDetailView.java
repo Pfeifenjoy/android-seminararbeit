@@ -59,7 +59,6 @@ public class ImageDetailView extends Activity {
     private SystemUiHider mSystemUiHider;
     private PiccerDatabaseHandler handler;
     private ImageItemAdapter adapter;
-    private ImageView contentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +73,18 @@ public class ImageDetailView extends Activity {
 
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
-        contentView = (ImageView) findViewById(R.id.fullscreenImageView);
+        final ImageView contentView = (ImageView) findViewById(R.id.fullscreenImageView);
 
         long id = Long.parseLong(getIntent().getStringExtra(Piccer.CLICKED_IMAGE));
         PiccerDatabaseHandler piccerDatabaseHandler = new PiccerDatabaseHandler(this);
         ImageItem imageItem = piccerDatabaseHandler.getImage(this, id);
 
         contentView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        contentView.setImageURI(imageItem.getImageUri());
+        try {
+            contentView.setImageURI(imageItem.getImageUri());
+        } catch (OutOfMemoryError e) {
+
+        }
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
@@ -228,11 +231,5 @@ public class ImageDetailView extends Activity {
             sendIntent.setType("image/png");
             startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
 
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        System.gc();
     }
 }
