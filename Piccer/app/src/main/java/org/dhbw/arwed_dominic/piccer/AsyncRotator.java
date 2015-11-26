@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
-import android.util.LruCache;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,6 +32,7 @@ public class AsyncRotator extends AsyncTask<File, Void, Void> {
     @Override
     protected Void doInBackground(File... params) {
         if(rotation == 0) return null;
+        tmpCount++;
         Bitmap bitmap = BitmapFactory.decodeFile(imageItem.getFile().getAbsolutePath());
         Matrix matrix = new Matrix();
         matrix.postRotate(rotation);
@@ -49,11 +49,14 @@ public class AsyncRotator extends AsyncTask<File, Void, Void> {
                 if (out != null) out.close();
             } catch (IOException e) {}
         }
+
         return null;
     }
 
     @Override
     protected void onPostExecute(Void _) {
+        tmpLocation.delete();
+        tmpCount--;
         tmpLocation.renameTo(imageItem.getFile());
         imageItem.notifyCache();
         adapter.notifyDataSetChanged();
@@ -63,6 +66,7 @@ public class AsyncRotator extends AsyncTask<File, Void, Void> {
         try {
             if(out != null) out.close();
             tmpLocation.delete();
+            tmpCount--;
         } catch (IOException e) {}
     }
 }
