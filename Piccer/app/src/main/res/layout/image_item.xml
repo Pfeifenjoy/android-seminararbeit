@@ -30,6 +30,7 @@
                 android:text="@string/title"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
+                android:id="@+id/titleLabel"
                 android:layout_height="wrap_content" />
 
             <TextView

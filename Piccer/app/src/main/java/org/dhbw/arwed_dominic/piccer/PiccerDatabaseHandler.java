@@ -26,6 +26,7 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
     public static final String KEY_ID = "_id";
     public static final String DATE = "date";
     public static final String PATH = "path";
+    public static final String TITLE = "title";
 
     private final Context context;
 
@@ -39,7 +40,8 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
         String query = "CREATE TABLE " + TABLE_IMAGES + " ( "
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + DATE + " TEXT, "
-                + PATH + " TEXT "
+                + PATH + " TEXT, "
+                + TITLE + " TEXT "
                 + " );";
         db.execSQL(query);
     }
@@ -67,9 +69,10 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
             date = dateFormat.parse(c.getString(c.getColumnIndex(DATE)));
         } catch (ParseException e) {}
         String name = c.getString(c.getColumnIndex(PATH));
+        String title = c.getString(c.getColumnIndex(TITLE));
 
         db.close();
-        return new ImageItem(context, date, name, id);
+        return new ImageItem(context, date, name, title, id);
     }
 
     public void addImage(ImageItem imageItem) {
@@ -77,6 +80,7 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(DATE, imageItem.getCreated());
         values.put(PATH, imageItem.getName());
+        values.put(TITLE, imageItem.getTitle());
         db.insert(TABLE_IMAGES, null, values);
         db.close();
     }

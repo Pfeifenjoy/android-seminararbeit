@@ -34,6 +34,7 @@ public class ImageItem implements Serializable {
     private Date created;
     private File file;
     private String name;
+    private String title;
     private long id;
     private Context context;
 
@@ -86,11 +87,12 @@ public class ImageItem implements Serializable {
         this.created = new Date();
     }
 
-    public ImageItem(Context context, Date created, String name, long id) {
+    public ImageItem(Context context, Date created, String name, String title, long id) {
         this.context = context;
         this.name = name;
         this.created = created;
         this.id = id;
+        this.title = title;
     }
 
     public ImageItem(Context context) {
@@ -201,5 +203,12 @@ public class ImageItem implements Serializable {
         return this.id;
     }
 
+    public void setTitle(String title){
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
 
 }

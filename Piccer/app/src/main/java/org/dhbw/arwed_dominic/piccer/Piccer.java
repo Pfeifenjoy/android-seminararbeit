@@ -84,7 +84,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
                 sendIntent.putParcelableArrayListExtra(sendIntent.EXTRA_STREAM, imageUris);
-                sendIntent.putExtra(sendIntent.EXTRA_TEXT, "Von Piccer gesendet");
+                sendIntent.putExtra(sendIntent.EXTRA_TEXT, R.string.sendMessage);
                 sendIntent.setType("image/*");
                 sendIntent.addFlags(sendIntent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
@@ -117,18 +117,19 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK ) {
             this.tmpImage.updateCreated();
-            this.handler.addImage(this.tmpImage);
-            this.adapter.changeCursor(this.handler.getImageTableCursor());
-            this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
-            setImageTitle();
+            addImage(this.tmpImage);
         }
         if(requestCode == REQUEST_GALLARY && resultCode == RESULT_OK){
             Uri selectedImageUri = data.getData();
             this.tmpImage = new ImageItem(this, selectedImageUri);
-            this.handler.addImage(this.tmpImage);
-            this.adapter.changeCursor(this.handler.getImageTableCursor());
-            this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
+            addImage(this.tmpImage);
         }
+    }
+
+    private void saveImage(ImageItem imageItem) {
+        this.handler.addImage(imageItem);
+        this.adapter.changeCursor(this.handler.getImageTableCursor());
+        this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
     }
 
     @Override
@@ -154,7 +155,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         return true;
     }
 
-    public void setImageTitle(){
+    public void addImage(final ImageItem imageItem){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.pleaseSelectName);
@@ -169,12 +170,15 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-              String  mText = input.getText().toString();
+                String title = input.getText().toString();
+                imageItem.setTitle(title);
+                saveImage(imageItem);
             }
         });
         builder.setNegativeButton(R.string.abort, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                saveImage(imageItem);
                 dialog.cancel();
             }
         });

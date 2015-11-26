@@ -58,7 +58,10 @@ public class ImageItemAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         TextView tvCreationDate = (TextView) view.findViewById(R.id.createdDate);
         TextView tvCreationTime = (TextView) view.findViewById(R.id.createdTime);
+        TextView tvTitleLabel = (TextView) view.findViewById(R.id.titleLabel);
+        TextView tvTitle = (TextView) view.findViewById(R.id.titleDescription);
         ImageView ivThumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+
 
         String creationDate = cursor.getString(cursor.getColumnIndex(PiccerDatabaseHandler.DATE));
         Date created = null;
@@ -78,7 +81,18 @@ public class ImageItemAdapter extends CursorAdapter {
             view.setBackgroundColor(ContextCompat.getColor(context, R.color.black_overlay));
         else view.setBackgroundColor(0);
         String name = cursor.getString(cursor.getColumnIndex(PiccerDatabaseHandler.PATH));
-        ImageItem imageItem = new ImageItem(context, created, name, id);
+
+        String title = cursor.getString(cursor.getColumnIndex(PiccerDatabaseHandler.TITLE));
+        if(title == null) {
+            tvTitle.setVisibility(View.GONE);
+            tvTitleLabel.setVisibility(View.GONE);
+        } else {
+            tvTitle.setVisibility(View.VISIBLE);
+            tvTitleLabel.setVisibility(View.VISIBLE);
+            tvTitle.setText(title);
+        }
+
+        ImageItem imageItem = new ImageItem(context, created, name, title, id);
 
         if(cancelPotentialWork(ivThumbnail.getId(), ivThumbnail)) {
             final ImageThumbnailLoader imageThumbnailLoader =
