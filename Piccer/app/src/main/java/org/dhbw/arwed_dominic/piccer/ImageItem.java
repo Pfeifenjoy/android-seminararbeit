@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Environment;
@@ -56,7 +57,6 @@ public class ImageItem implements Serializable {
         this.context = context;
         this.name = uri.getLastPathSegment();
         this.created = new Date();
-        Log.i("MyApp", uri.getPath());
         BufferedInputStream in = null;
         BufferedOutputStream out = null;
         try {
@@ -209,6 +209,27 @@ public class ImageItem implements Serializable {
 
     public String getTitle() {
         return this.title;
+    }
+
+    public void rotate(int rotation) {
+        Bitmap bitmap = BitmapFactory.decodeFile(getFile().getAbsolutePath());
+        Matrix matrix = new Matrix();
+        matrix.postRotate(rotation);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(getFile());
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+
+        } catch (IOException e) {
+            //TODO
+        }
+        finally {
+            try {
+                if (out != null) out.close();
+            } catch (IOException e) {}
+        }
+
     }
 
 }

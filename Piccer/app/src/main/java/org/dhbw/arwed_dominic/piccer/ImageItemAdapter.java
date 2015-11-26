@@ -35,7 +35,7 @@ public class ImageItemAdapter extends CursorAdapter {
     private Set<Long> selected = new HashSet<Long>();
 
     private static final SimpleDateFormat ITEM_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
-    private static final SimpleDateFormat ITEM_TIME_FORMAT = new SimpleDateFormat("hh:mm");
+    private static final SimpleDateFormat ITEM_TIME_FORMAT = new SimpleDateFormat("HH:mm");
 
 
     public ImageItemAdapter(Context context, Cursor cursor, int flag) {
