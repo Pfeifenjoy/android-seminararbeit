@@ -6,11 +6,24 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.util.LruCache;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.Buffer;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -36,6 +49,41 @@ public class ImageItem implements Serializable {
                 return bitmap.getByteCount() / 1024;
             }
         };
+    }
+
+    public ImageItem(Context context, Uri uri) {
+        this.context = context;
+        this.name = uri.getLastPathSegment();
+        this.created = new Date();
+        Log.i("MyApp", uri.getPath());
+        BufferedInputStream in = null;
+        BufferedOutputStream out = null;
+        try {
+            InputStream src = context.getContentResolver().openInputStream(uri);
+            File dest = getFile();
+
+            in = new BufferedInputStream(src);
+            out = new BufferedOutputStream(new FileOutputStream(dest));
+
+            byte[] buffer = new byte[1024];
+            in.read(buffer);
+            do {
+                out.write(buffer);
+            } while (in.read(buffer) != -1);
+
+        } catch (FileNotFoundException e) {
+            //TODO
+            Log.e("Piccer", "error", e);
+        } catch (IOException e) {
+            //TODO
+            Log.e("Piccer", "error", e);
+        } finally {
+            try {
+                if (in != null) in.close();
+                if (out != null) out.close();
+            } catch (IOException e){}
+        }
+        this.created = new Date();
     }
 
     public ImageItem(Context context, Date created, String name, long id) {

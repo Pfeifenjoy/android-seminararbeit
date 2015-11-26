@@ -21,6 +21,7 @@ import java.util.Set;
 public class Piccer extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     public static final int REQUEST_CAMERA = 0;
+    public static final int REQUEST_GALLARY = 1;
     public static final String IMAGE_LIST_STATE = "imageList";
     public static final String CLICKED_IMAGE = "clickedImage";
 
@@ -97,14 +98,27 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
             t.show();
         }
     }
+    public void loadPicture(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_GALLARY);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK) {
+        if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK ) {
             this.tmpImage.updateCreated();
             this.handler.addImage(this.tmpImage);
             this.adapter.changeCursor(this.handler.getImageTableCursor());
             this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
+        }
+        if(requestCode == REQUEST_GALLARY && resultCode == RESULT_OK){
+            Uri selectedImageUri = data.getData();
+            this.tmpImage = new ImageItem(this, selectedImageUri);
+            this.handler.addImage(this.tmpImage);
+            this.adapter.changeCursor(this.handler.getImageTableCursor());
+            this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
+            Toast t = Toast.makeText(this, selectedImageUri.toString(), Toast.LENGTH_LONG);
+            t.show();
         }
     }
 
@@ -130,4 +144,5 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         else getMenuInflater().inflate(R.menu.menu_piccer, this.menu);
         return true;
     }
+
 }

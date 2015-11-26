@@ -14,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ViewAnimator;
@@ -64,6 +66,7 @@ public class ImageDetailView extends Activity {
 
         setContentView(R.layout.activity_image_detail_view);
         setupActionBar();
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         this.handler = new PiccerDatabaseHandler(this);
         this.adapter = new ImageItemAdapter(this,  handler.getImageTableCursor(), 0);

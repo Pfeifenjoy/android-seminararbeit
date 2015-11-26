@@ -1,14 +1,19 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:textColor="#0099cc"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
+    android:textColor="#0099cc"
      tools:context=".Piccer">
+
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:layout_weight="1">
+        >
 
         <ListView
             android:id="@+id/mainImageList"
@@ -18,7 +23,7 @@
             ></ListView>
     </ScrollView>
 
-    <LinearLayout
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -33,6 +38,49 @@
             android:layout_weight="0"
             android:onClick="takePicture"
             />
+    </LinearLayout>-->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="right"
+        android:layout_height="match_parent">
+        <com.tr4android.support.extension.widget.FloatingActionMenu
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            app:fabMenuCloseIconAngle="135"
+            app:fabMenuLabelStyle="@style/label_style_dark">
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="20dp"
+                android:src="@drawable/ic_add_white_24dp"
+                app:pressedTranslationZ="12dp" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:src="@drawable/ic_photo_white_24dp"
+                app:fabSize="mini"
+                android:onClick="loadPicture"
+                app:pressedTranslationZ="12dp" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:onClick="takePicture"
+                android:src="@drawable/ic_photo_camera_white_24dp"
+                app:fabSize="mini"
+                app:pressedTranslationZ="12dp" />
+
+
+        </com.tr4android.support.extension.widget.FloatingActionMenu>
+
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout >
