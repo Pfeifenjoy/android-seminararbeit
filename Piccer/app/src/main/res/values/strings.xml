@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">Piccer</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Einstellungen</string>
 
-    <string name="noCamera">Could not open the camera.</string>
+    <string name="noCamera">Kamera kann nicht geöffnet werden</string>
 
     <string name="title_activity_image_detail_view">Details</string>
-    <string name="shareButton">Share your Picture</string>
+    <string name="shareButton">Teile dein Bild</string>
 
-    <string name="delete">Delete Items</string>
-    <string name="share">Share Items</string>
+    <string name="delete">Löschen</string>
+    <string name="share">Teilen</string>
 
     <string name="date">Datum: </string>
     <string name="title">Titel: </string>
@@ -21,4 +21,8 @@
     <string name="saveToGallery">In Gallerie speichern</string>
 
     <string name="sendMessage">Von Piccer gesendet</string>
+    <string name="addToGalery">"Bilder der Galerie hinzugefügt"</string>
+    <string name="notAddedToGalery">"Bild konnte nicht hinzugefügt werden"</string>
+    <string name="createdBy">"Created by Piccer"</string>
+    <string name="saveToGalery">In Galerie speichern</string>
 </resources>
