@@ -72,9 +72,7 @@ public class ImageItem implements Serializable {
                 out.write(buffer);
             } while (in.read(buffer) != -1);
 
-            if(cache.get(this.name) != null) {
-                cache.remove(this.name);
-            }
+            notifyCache();
         } catch (FileNotFoundException e) {
             //TODO
             Log.e("Piccer", "error", e);
@@ -212,6 +210,12 @@ public class ImageItem implements Serializable {
 
     public String getTitle() {
         return this.title;
+    }
+
+    public void notifyCache() {
+        if(cache.get(this.name) != null) {
+            cache.remove(this.name);
+        }
     }
 
     public void rotate(int rotation) {
