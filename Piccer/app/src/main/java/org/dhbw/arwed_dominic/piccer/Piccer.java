@@ -81,6 +81,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                 }
                 break;
         }
+        this.adapter.clearSelect();
         return super.onOptionsItemSelected(item);
     }
 
@@ -117,8 +118,6 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
             this.handler.addImage(this.tmpImage);
             this.adapter.changeCursor(this.handler.getImageTableCursor());
             this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
-            Toast t = Toast.makeText(this, selectedImageUri.toString(), Toast.LENGTH_LONG);
-            t.show();
         }
     }
 
