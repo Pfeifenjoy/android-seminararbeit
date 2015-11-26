@@ -5,13 +5,16 @@
     <string name="noCamera">Could not open the camera.</string>
 
     <string name="title_activity_image_detail_view">Details</string>
-    <string name="dummy_button">Share your Picture</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="shareButton">Share your Picture</string>
 
     <string name="delete">Delete Items</string>
     <string name="share">Share Items</string>
 
-    <string name="date">Datum:\n</string>
-    <string name="title">Titel:\n</string>
-    <string name="oClock">Uhrzeit:\n</string>
+    <string name="date">Datum: </string>
+    <string name="title">Titel: </string>
+    <string name="oClock">Uhrzeit: </string>
+
+    <string name="ok">OK</string>
+    <string name="abort">Abbrechen</string>
+    <string name="pleaseSelectName">Wähle Title des Bildes</string>
 </resources>

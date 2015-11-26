@@ -157,7 +157,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     public void setImageTitle(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Wähle Title des Bildes");
+        builder.setTitle(R.string.pleaseSelectName);
 
         // Set up the input
         final EditText input = new EditText(this);
@@ -166,13 +166,13 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         builder.setView(input);
 
         // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
               String  mText = input.getText().toString();
             }
         });
-        builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.abort, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
