@@ -103,17 +103,17 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                         ImageItem imageItem = this.handler.getImage(this, id);
                         File file = imageItem.getFile();
 
-                        MediaStore.Images.Media.insertImage(getContentResolver(), file.getPath(), file.getName(), "Created by Piccer");
+                        MediaStore.Images.Media.insertImage(getContentResolver(), file.getPath(), file.getName(), String.valueOf(R.string.createdBy));
                         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                         Uri contentUri = Uri.fromFile(file);
                         mediaScanIntent.setData(contentUri);
                         sendBroadcast(mediaScanIntent);
                     } catch (FileNotFoundException e) {
-                        Toast.makeText(getBaseContext(), "Bild konnte nicht hinzugefügt werden", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), R.string.notAddedToGalery , Toast.LENGTH_SHORT).show();
 
                     }
                 }
-                Toast.makeText(getBaseContext(), " Bilder der Galerie hinzugefügt", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), R.string.addToGalery , Toast.LENGTH_SHORT).show();
 
                 return true;
 

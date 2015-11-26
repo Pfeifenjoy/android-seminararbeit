@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
@@ -59,6 +60,7 @@ public class ImageDetailView extends Activity {
     private SystemUiHider mSystemUiHider;
     private PiccerDatabaseHandler handler;
     private ImageItemAdapter adapter;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,4 +234,12 @@ public class ImageDetailView extends Activity {
             startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detail_view, menu);
+        this.menu = menu;
+        return true;
+    }
+
 }
