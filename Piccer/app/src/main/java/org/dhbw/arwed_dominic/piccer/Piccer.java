@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -19,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -117,7 +120,31 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK ) {
             this.tmpImage.updateCreated();
+            File file = this.tmpImage.getFile();
+            int rotation = 0;
+            try {
+                ExifInterface exif = new ExifInterface(file.getAbsolutePath());
+                rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+                switch(rotation){
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotation = 270;
+
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotation = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotation = 90;
+                        break;
+                }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             addImage(this.tmpImage);
+
         }
         if(requestCode == REQUEST_GALLARY && resultCode == RESULT_OK){
             Uri selectedImageUri = data.getData();
