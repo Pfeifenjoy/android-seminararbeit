@@ -198,11 +198,10 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
             this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
 
         } catch (IOException e) {
-            e.printStackTrace();
-            //TODO
+            Toast.makeText(this, R.string.couldNotLoadImage, Toast.LENGTH_SHORT);
+            Log.w("Piccer", "An IOException occured. The image file has no exif.", e);
         } catch (ParseException e) {
-            Log.e("Piccer", "Exception", e);
-            //TODO
+            Log.e("Piccer", "The date of the exif file could not be parsed", e);
         }
     }
 

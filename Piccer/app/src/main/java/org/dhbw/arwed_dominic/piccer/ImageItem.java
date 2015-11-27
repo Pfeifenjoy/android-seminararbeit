@@ -2,6 +2,7 @@ package org.dhbw.arwed_dominic.piccer;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
@@ -12,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.LruCache;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -75,11 +77,11 @@ public class ImageItem implements Serializable {
 
             notifyCache();
         } catch (FileNotFoundException e) {
-            //TODO
-            Log.e("Piccer", "error", e);
+            Toast.makeText(context, R.string.couldNotLoadImage, Toast.LENGTH_SHORT).show();
+            Log.w("Piccer", "error", e);
         } catch (IOException e) {
-            //TODO
-            Log.e("Piccer", "error", e);
+            Toast.makeText(context, R.string.couldNotLoadImage, Toast.LENGTH_SHORT).show();
+            Log.w("Piccer", "error", e);
         } finally {
             try {
                 if (in != null) in.close();
@@ -146,6 +148,7 @@ public class ImageItem implements Serializable {
         if(cache.get(this.name) == null) {
             final BitmapFactory.Options options = new BitmapFactory.Options();
             final String file = getFile().getAbsolutePath();
+            Bitmap thumbnail = null;
             try {
                 options.inJustDecodeBounds = true;
                 BitmapRegionDecoder bitmapRegionDecoder = BitmapRegionDecoder.newInstance(file, false);
@@ -157,14 +160,14 @@ public class ImageItem implements Serializable {
                 bitmapRegionDecoder.decodeRegion(rect, options);
                 options.inSampleSize = getInSampleSize(options, width, height);
                 options.inJustDecodeBounds = false;
-                Bitmap thumbnail = bitmapRegionDecoder.decodeRegion(rect, options);
-                cache.put(this.name, thumbnail);
-                return thumbnail;
+                thumbnail = bitmapRegionDecoder.decodeRegion(rect, options);
             } catch (IOException e) {
-            } //TODO create image if it fails.
+                thumbnail = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_broken_image_black_24dp);
+            }
+            cache.put(this.name, thumbnail);
+            return thumbnail;
         } else return cache.get(this.name);
 
-        return null;
     }
 
     private int getInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -216,29 +219,6 @@ public class ImageItem implements Serializable {
         if(cache.get(this.name) != null) {
             cache.remove(this.name);
         }
-    }
-
-    public void rotate(int rotation) {
-        Bitmap bitmap = BitmapFactory.decodeFile(getFile().getAbsolutePath());
-        Matrix matrix = new Matrix();
-        matrix.postRotate(rotation);
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(getFile());
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-            if(cache.get(this.name) != null) {
-                cache.remove(this.name);
-            }
-        } catch (IOException e) {
-            //TODO
-        }
-        finally {
-            try {
-                if (out != null) out.close();
-            } catch (IOException e) {}
-        }
-
     }
 
     public void saveToGallary() {

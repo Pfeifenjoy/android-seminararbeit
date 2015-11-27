@@ -42,7 +42,7 @@ public class AsyncRotator extends AsyncTask<File, Void, Void> {
             out = new FileOutputStream(tmpLocation);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (IOException e) {
-            //TODO
+            //Rotation did not work.
         }
         finally {
             try {

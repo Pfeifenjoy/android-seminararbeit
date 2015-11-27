@@ -67,12 +67,17 @@ public class ImageDetailView extends AppCompatActivity {
         long id = Long.parseLong(getIntent().getStringExtra(Piccer.CLICKED_IMAGE));
         PiccerDatabaseHandler piccerDatabaseHandler = new PiccerDatabaseHandler(this);
         imageItem = piccerDatabaseHandler.getImage(this, id);
+        if(!imageItem.getFile().exists()) {
+            Toast.makeText(this, R.string.couldNotLoadImage, Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
         contentView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         try {
             contentView.setImageURI(imageItem.getImageUri());
         } catch (OutOfMemoryError e) {
-            //TODO
+            Toast.makeText(this, R.string.couldNotLoadImage, Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 

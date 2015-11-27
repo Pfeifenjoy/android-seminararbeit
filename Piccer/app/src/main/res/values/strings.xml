@@ -26,4 +26,6 @@
     <string name="createdBy">"Created by Piccer"</string>
     <string name="saveToGalery">In Galerie speichern</string>
     <string name="modifyTitle">Titel ändern</string>
+
+    <string name="couldNotLoadImage">Bild konnte nicht geladen werden.</string>
 </resources>
