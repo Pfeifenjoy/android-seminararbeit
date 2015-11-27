@@ -11,6 +11,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -86,6 +87,9 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void deleteImage(long imageId) {
+        Set<Long> images = new HashSet<Long>();
+        images.add(imageId);
+        deleteImages(images);
     }
 
     public void deleteImages(Set<Long> imageIds) {

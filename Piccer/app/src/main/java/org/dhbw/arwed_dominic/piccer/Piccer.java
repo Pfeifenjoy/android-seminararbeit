@@ -48,11 +48,6 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
         //Initialize the list
         this.handler = new PiccerDatabaseHandler(this);
-        this.adapter = new ImageItemAdapter(this, handler.getImageTableCursor(), 0);
-        mainImageList = (ListView)findViewById(R.id.mainImageList);
-        mainImageList.setAdapter(adapter);
-        mainImageList.setOnItemClickListener(this);
-        mainImageList.setOnItemLongClickListener(this);
 
         if(savedInstanceState != null) {
             Parcelable state = savedInstanceState.getParcelable(IMAGE_LIST_STATE);
@@ -61,6 +56,15 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mainImageList = (ListView)findViewById(R.id.mainImageList);
+        this.adapter = new ImageItemAdapter(this, handler.getImageTableCursor(), 0);
+        mainImageList.setAdapter(adapter);
+        mainImageList.setOnItemClickListener(this);
+        mainImageList.setOnItemLongClickListener(this);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_piccer, menu);

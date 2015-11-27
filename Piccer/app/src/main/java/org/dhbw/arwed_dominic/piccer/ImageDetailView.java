@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,9 +20,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ViewAnimator;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -59,8 +64,8 @@ public class ImageDetailView extends Activity {
      */
     private SystemUiHider mSystemUiHider;
     private PiccerDatabaseHandler handler;
-    private ImageItemAdapter adapter;
     private Menu menu;
+    private ImageItem imageItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +76,6 @@ public class ImageDetailView extends Activity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         this.handler = new PiccerDatabaseHandler(this);
-        this.adapter = new ImageItemAdapter(this,  handler.getImageTableCursor(), 0);
 
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
@@ -79,7 +83,7 @@ public class ImageDetailView extends Activity {
 
         long id = Long.parseLong(getIntent().getStringExtra(Piccer.CLICKED_IMAGE));
         PiccerDatabaseHandler piccerDatabaseHandler = new PiccerDatabaseHandler(this);
-        ImageItem imageItem = piccerDatabaseHandler.getImage(this, id);
+        imageItem = piccerDatabaseHandler.getImage(this, id);
 
         contentView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         try {
@@ -169,25 +173,6 @@ public class ImageDetailView extends Activity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            // TODO: If Settings has multiple levels, Up should navigate up
-            // that hierarchy.
-            NavUtils.navigateUpFromSameTask(this);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away
@@ -240,6 +225,36 @@ public class ImageDetailView extends Activity {
         getMenuInflater().inflate(R.menu.menu_detail_view, menu);
         this.menu = menu;
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_item:
+                this.handler.deleteImage(imageItem.getId());
+                finish();
+                break;
+            case R.id.saveToGallery:
+                //Include all selected images in the system gallery Folder: Camera
+
+                try {
+                    File file = imageItem.getFile();
+
+                    MediaStore.Images.Media.insertImage(getContentResolver(), file.getPath(), file.getName(), String.valueOf(R.string.createdBy));
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(file);
+                    mediaScanIntent.setData(contentUri);
+                    sendBroadcast(mediaScanIntent);
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(getBaseContext(), R.string.notAddedToGalery, Toast.LENGTH_SHORT).show();
+
+                }
+                Toast.makeText(getBaseContext(), R.string.addToGalery , Toast.LENGTH_SHORT).show();
+
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
