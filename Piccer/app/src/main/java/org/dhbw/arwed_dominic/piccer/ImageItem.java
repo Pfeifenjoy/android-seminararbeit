@@ -27,6 +27,7 @@ import java.nio.Buffer;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by arwed on 24.10.15.
@@ -56,7 +57,6 @@ public class ImageItem implements Serializable {
     public ImageItem(Context context, Uri uri) {
         this.context = context;
         this.name = uri.getLastPathSegment();
-        this.created = new Date();
         BufferedInputStream in = null;
         BufferedOutputStream out = null;
         try {
@@ -85,7 +85,6 @@ public class ImageItem implements Serializable {
                 if (out != null) out.close();
             } catch (IOException e){}
         }
-        this.created = new Date();
     }
 
     public ImageItem(Context context, Date created, String name, String title, long id) {
@@ -97,12 +96,12 @@ public class ImageItem implements Serializable {
     }
 
     public ImageItem(Context context) {
-        updateCreated();
-        this.name = "image-" + getCreated() + ".png";
+        this.name = "image-" + UUID.randomUUID() + ".png";
         this.context = context;
     }
-    public void updateCreated () {
-        this.created = new Date();
+
+    public void setDate(Date date) {
+        this.created = date;
     }
     public String getCreated() {
         return DATE_FORMAT.format(this.created);

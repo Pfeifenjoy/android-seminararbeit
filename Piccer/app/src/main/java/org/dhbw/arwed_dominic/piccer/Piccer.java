@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,10 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Set;
 
 
@@ -169,7 +173,6 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     }
 
     private void saveImage(ImageItem imageItem) {
-        this.tmpImage.updateCreated();
         File file = this.tmpImage.getFile();
         int rotation = 0;
         try {
@@ -193,13 +196,23 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                 rotator.execute(imageItem.getFile());
             }
 
+            String sDate = exif.getAttribute(ExifInterface.TAG_DATETIME);
+            Date date;
+            if(sDate == null)
+                date = new Date();
+            else date = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(sDate);
+            tmpImage.setDate(date);
+            this.handler.addImage(imageItem);
+            this.adapter.changeCursor(this.handler.getImageTableCursor());
+            this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
+
         } catch (IOException e) {
             e.printStackTrace();
             //TODO
+        } catch (ParseException e) {
+            Log.e("Piccer", "Exception", e);
+            //TODO
         }
-        this.handler.addImage(imageItem);
-        this.adapter.changeCursor(this.handler.getImageTableCursor());
-        this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
     }
 
     @Override
