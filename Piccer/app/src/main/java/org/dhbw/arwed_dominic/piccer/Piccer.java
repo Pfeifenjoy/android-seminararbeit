@@ -258,4 +258,13 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
         builder.show();
     }
+
+    @Override
+    public void onBackPressed() {
+        if(adapter.getSelectedImageIds().size() > 0) {
+            adapter.clearSelect();
+            adapter.notifyDataSetChanged();
+        }
+        else finish();
+    }
 }
