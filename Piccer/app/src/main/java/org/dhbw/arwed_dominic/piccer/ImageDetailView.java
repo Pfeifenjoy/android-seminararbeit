@@ -50,6 +50,7 @@ public class ImageDetailView extends AppCompatActivity {
     private ImageItem imageItem;
     private ImageView contentView;
     private float rotation;
+    private AsyncRotator rotator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,8 +119,10 @@ public class ImageDetailView extends AppCompatActivity {
         contentView.setPivotX(contentView.getWidth() / 2);
         contentView.setPivotY(contentView.getHeight() / 2);
         contentView.setRotation(rotation);
-        AsyncRotator r = new AsyncRotator(this, imageItem, (int) rotation);
-        r.execute();
+        if(rotator != null)
+            rotator.cancel(true);
+        rotator = new AsyncRotator(this, imageItem, (int) rotation);
+        rotator.execute();
     }
 
     public void setTitle(View _) {
