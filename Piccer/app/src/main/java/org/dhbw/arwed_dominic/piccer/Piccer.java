@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -51,8 +52,17 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         //Initialize the list
         this.handler = new PiccerDatabaseHandler(this);
 
+        ScrollView scrollView = (ScrollView)findViewById(R.id.scrollView);
+        scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        mainImageList = (ListView)findViewById(R.id.mainImageList);
+        mainImageList.setOnItemClickListener(this);
+        mainImageList.setOnItemLongClickListener(this);
+        this.adapter = new ImageItemAdapter(this, handler.getImageTableCursor(), 0);
+        mainImageList.setAdapter(adapter);
+
         if(savedInstanceState != null) {
             listState = savedInstanceState.getParcelable(IMAGE_LIST_STATE);
+            mainImageList.onRestoreInstanceState(listState);
         }
 
     }
@@ -60,14 +70,11 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     @Override
     public void onResume() {
         super.onResume();
-        mainImageList = (ListView)findViewById(R.id.mainImageList);
-        mainImageList.setOnItemClickListener(this);
-        mainImageList.setOnItemLongClickListener(this);
-        this.adapter = new ImageItemAdapter(this, handler.getImageTableCursor(), 0);
-        mainImageList.setAdapter(adapter);
-        if(listState != null)
-            mainImageList.onRestoreInstanceState(listState);
+        this.adapter.changeCursor(handler.getImageTableCursor());
+        adapter.notifyDataSetChanged();
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_piccer, menu);
@@ -172,7 +179,6 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
             switch(rotation){
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     rotation = 270;
-
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_180:
                     rotation = 180;
@@ -189,6 +195,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
         } catch (IOException e) {
             e.printStackTrace();
+            //TODO
         }
         this.handler.addImage(imageItem);
         this.adapter.changeCursor(this.handler.getImageTableCursor());

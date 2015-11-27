@@ -7,18 +7,9 @@
 
     android:layout_height="fill_parent">
 
-
-    <ImageView
-        android:id="@+id/thumbnail"
-        android:layout_width="@android:dimen/thumbnail_width"
-        android:layout_height="@dimen/thumbnailHeight"
-        android:adjustViewBounds="true"
-        android:layout_margin="@dimen/thumbnailMargin"
-        android:contentDescription="" />
-
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:gravity="center"
         android:layout_height="match_parent">
 
@@ -26,11 +17,12 @@
             android:layout_width="match_parent"
             android:gravity="left"
             android:layout_height="wrap_content">
-        <TextView
+            <TextView
                 android:text="@string/title"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:id="@+id/titleLabel"
+                android:paddingRight="@dimen/fam_label_spacing"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -51,6 +43,7 @@
                 android:text="@string/date"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
+                android:paddingRight="@dimen/fam_label_spacing"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -69,6 +62,7 @@
                 android:text="@string/oClock"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
+                android:paddingRight="@dimen/fam_label_spacing"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -81,6 +75,15 @@
 
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="@android:dimen/thumbnail_width"
+        android:layout_height="@dimen/thumbnailHeight"
+        android:adjustViewBounds="true"
+        android:layout_margin="@dimen/thumbnailMargin"
+        android:contentDescription="" />
+
 <!--    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="2dp"
