@@ -8,13 +8,15 @@ import android.widget.ListView;
 public class Scroller implements Runnable {
     final private ListView listView;
     final private int position;
-    public Scroller(ListView listView, int position) {
+    final private boolean direction;
+    public Scroller(ListView listView, int position, boolean direction) {
         this.listView = listView;
         this.position = position;
+        this.direction = direction;
     }
 
     @Override
     public void run() {
-        this.listView.smoothScrollBy(this.listView.getHeight() * this.position, 9000);
+        this.listView.smoothScrollBy((direction ? this.listView.getHeight() * this.position : 0), 9000);
     }
 }

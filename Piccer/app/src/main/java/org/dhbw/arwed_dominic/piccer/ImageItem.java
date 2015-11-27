@@ -59,7 +59,7 @@ public class ImageItem implements Serializable {
 
     public ImageItem(Context context, Uri uri) {
         this.context = context;
-        this.name = uri.getLastPathSegment();
+        generateName();
         BufferedInputStream in = null;
         BufferedOutputStream out = null;
         try {
@@ -99,7 +99,7 @@ public class ImageItem implements Serializable {
     }
 
     public ImageItem(Context context) {
-        this.name = "image-" + UUID.randomUUID() + ".png";
+        generateName();
         this.context = context;
     }
 
@@ -228,5 +228,8 @@ public class ImageItem implements Serializable {
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
         values.put(MediaStore.MediaColumns.DATA, getFile().getAbsolutePath());
         context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }
+    private void generateName() {
+        this.name = "image-" + UUID.randomUUID() + ".png";
     }
 }

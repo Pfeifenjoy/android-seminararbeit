@@ -29,6 +29,9 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
     public static final String PATH = "path";
     public static final String TITLE = "title";
 
+    public static boolean ASCENDING = true;
+    public static boolean DESCENDING = !ASCENDING;
+
     private final Context context;
 
     public PiccerDatabaseHandler(Context context) {
@@ -53,9 +56,11 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Cursor getImageTableCursor() {
+    public Cursor getImageTableCursor(String field, boolean order) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_IMAGES + ";", null);
+        String query = "SELECT * FROM " + TABLE_IMAGES + " ORDER BY " + field + " " +
+                        (order ? "ASC" : "DESC") + ";";
+        Cursor c = db.rawQuery(query, null);
         return c;
     }
 

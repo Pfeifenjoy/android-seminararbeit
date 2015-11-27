@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     public static final int REQUEST_GALLARY = 1;
     public static final String IMAGE_LIST_STATE = "imageList";
     public static final String CLICKED_IMAGE = "clickedImage";
+    public static final String ORDER = "listOrder";
 
     private ListView mainImageList;
     private ImageItemAdapter adapter;
@@ -45,8 +47,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     private static ImageItem tmpImage;
     private Menu menu;
     private Parcelable listState;
-
-
+    private boolean order = PiccerDatabaseHandler.DESCENDING;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,23 +60,23 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         ScrollView scrollView = (ScrollView)findViewById(R.id.scrollView);
         scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         mainImageList = (ListView)findViewById(R.id.mainImageList);
+        updateList();
         mainImageList.setOnItemClickListener(this);
         mainImageList.setOnItemLongClickListener(this);
-        this.adapter = new ImageItemAdapter(this, handler.getImageTableCursor(), 0);
         mainImageList.setAdapter(adapter);
 
         if(savedInstanceState != null) {
             listState = savedInstanceState.getParcelable(IMAGE_LIST_STATE);
             mainImageList.onRestoreInstanceState(listState);
+            order = savedInstanceState.getBoolean(ORDER);
         }
-
+        updateList();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        this.adapter.changeCursor(handler.getImageTableCursor());
-        adapter.notifyDataSetChanged();
+        updateList();
     }
 
 
@@ -92,8 +93,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         switch (item.getItemId()) {
             case R.id.delete_item:
                 this.handler.deleteImages(this.adapter.getSelectedImageIds());
-                this.adapter.changeCursor(this.handler.getImageTableCursor());
-                this.adapter.notifyDataSetChanged();
+                updateList();
                 break;
             case R.id.share_item:
 
@@ -119,8 +119,12 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                     imageItem.saveToGallary();
                 }
                 Toast.makeText(getBaseContext(), R.string.addToGalery , Toast.LENGTH_SHORT).show();
+                break;
 
-                return true;
+            case R.id.changeOrder:
+                this.order = !this.order;
+                updateList();
+                break;
 
         }
         this.adapter.clearSelect();
@@ -193,9 +197,8 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
             else date = dateFormat.parse(sDate);
             tmpImage.setDate(date);
             this.handler.addImage(imageItem);
-            this.adapter.changeCursor(this.handler.getImageTableCursor());
-            adapter.notifyDataSetChanged();
-            this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
+            updateList();
+            this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount(), order));
 
         } catch (IOException e) {
             Toast.makeText(this, R.string.couldNotLoadImage, Toast.LENGTH_SHORT);
@@ -209,6 +212,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(IMAGE_LIST_STATE, mainImageList.onSaveInstanceState());
+        outState.putBoolean(ORDER, order);
     }
 
     @Override
@@ -263,8 +267,17 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     public void onBackPressed() {
         if(adapter.getSelectedImageIds().size() > 0) {
             adapter.clearSelect();
-            adapter.notifyDataSetChanged();
+            updateList();
         }
         else finish();
+    }
+
+    private void updateList() {
+        adapter = new ImageItemAdapter(this, handler.getImageTableCursor("_id", order), 0);
+        Parcelable p = mainImageList.onSaveInstanceState();
+        mainImageList.setAdapter(null);
+        mainImageList.setAdapter(adapter);
+        mainImageList.onRestoreInstanceState(p);
+        adapter.notifyDataSetChanged();
     }
 }

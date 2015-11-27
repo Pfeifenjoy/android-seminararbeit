@@ -57,6 +57,7 @@ public class AsyncRotator extends AsyncTask<File, Void, Void> {
     protected void onPostExecute(Void _) {
         tmpCount--;
         tmpLocation.renameTo(destination);
+        imageItem.notifyCache();
         tmpLocation.delete();
     }
     @Override

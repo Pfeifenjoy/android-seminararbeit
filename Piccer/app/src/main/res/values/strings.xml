@@ -28,4 +28,5 @@
     <string name="modifyTitle">Titel ändern</string>
 
     <string name="couldNotLoadImage">Bild konnte nicht geladen werden.</string>
+    <string name="changeOrder">Reihenfolge ändern</string>
 </resources>

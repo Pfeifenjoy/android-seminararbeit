@@ -1,4 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".Piccer">
+    <item android:icon="@drawable/ic_swap_vert_white_24dp"
+        android:title="@string/changeOrder"
+        android:id="@+id/changeOrder"
+        app:showAsAction="ifRoom"
+        />
 </menu>
