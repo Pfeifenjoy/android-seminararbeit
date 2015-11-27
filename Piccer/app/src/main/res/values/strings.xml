@@ -25,4 +25,5 @@
     <string name="notAddedToGalery">"Bild konnte nicht hinzugefügt werden"</string>
     <string name="createdBy">"Created by Piccer"</string>
     <string name="saveToGalery">In Galerie speichern</string>
+    <string name="modifyTitle">Titel ändern</string>
 </resources>

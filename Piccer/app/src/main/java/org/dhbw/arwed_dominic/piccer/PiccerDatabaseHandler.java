@@ -114,4 +114,14 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(query);
         db.close();
     }
+
+    public void updateImageItem(ImageItem imageItem) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DATE, imageItem.getCreated());
+        values.put(PATH, imageItem.getName());
+        values.put(TITLE, imageItem.getTitle());
+        db.update(TABLE_IMAGES, values, "_id=" + imageItem.getId(), null);
+        db.close();
+    }
 }
