@@ -1,5 +1,6 @@
 package org.dhbw.arwed_dominic.piccer;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -240,4 +241,12 @@ public class ImageItem implements Serializable {
 
     }
 
+    public void saveToGallary() {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, getTitle());
+        values.put(MediaStore.Images.Media.DATE_TAKEN, getCreated());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        values.put(MediaStore.MediaColumns.DATA, getFile().getAbsolutePath());
+        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }
 }

@@ -114,22 +114,9 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                 break;
 
             case R.id.saveToGallery:
-                //Include all selected images in the system gallery Folder: Camera
-
                 for (long id : ids) {
-                    try {
-                        ImageItem imageItem = this.handler.getImage(this, id);
-                        File file = imageItem.getFile();
-
-                        MediaStore.Images.Media.insertImage(getContentResolver(), file.getPath(), file.getName(), String.valueOf(R.string.createdBy));
-                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                        Uri contentUri = Uri.fromFile(file);
-                        mediaScanIntent.setData(contentUri);
-                        sendBroadcast(mediaScanIntent);
-                    } catch (FileNotFoundException e) {
-                        Toast.makeText(getBaseContext(), R.string.notAddedToGalery , Toast.LENGTH_SHORT).show();
-
-                    }
+                    ImageItem imageItem = this.handler.getImage(this, id);
+                    imageItem.saveToGallary();
                 }
                 Toast.makeText(getBaseContext(), R.string.addToGalery , Toast.LENGTH_SHORT).show();
 
@@ -198,12 +185,16 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
             String sDate = exif.getAttribute(ExifInterface.TAG_DATETIME);
             Date date;
-            if(sDate == null)
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+            if(sDate == null) {
                 date = new Date();
-            else date = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(sDate);
+                exif.setAttribute(ExifInterface.TAG_DATETIME, dateFormat.format(date));
+            }
+            else date = dateFormat.parse(sDate);
             tmpImage.setDate(date);
             this.handler.addImage(imageItem);
             this.adapter.changeCursor(this.handler.getImageTableCursor());
+            adapter.notifyDataSetChanged();
             this.mainImageList.post(new Scroller(this.mainImageList, this.adapter.getCount()));
 
         } catch (IOException e) {
