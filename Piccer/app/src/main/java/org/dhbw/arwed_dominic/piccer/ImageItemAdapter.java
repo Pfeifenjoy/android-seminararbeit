@@ -37,10 +37,12 @@ public class ImageItemAdapter extends CursorAdapter {
     private static final SimpleDateFormat ITEM_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
     private static final SimpleDateFormat ITEM_TIME_FORMAT = new SimpleDateFormat("HH:mm");
 
+    private Cursor cursor;
 
     public ImageItemAdapter(Context context, Cursor cursor, int flag) {
         super(context, cursor, flag);
         this.context = context;
+        this.cursor = cursor;
     }
 
     @Override
