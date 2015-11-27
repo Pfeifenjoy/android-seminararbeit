@@ -178,10 +178,10 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                     break;
             }
 
-            if(rotation != 0) {
-                AsyncRotator rotator = new AsyncRotator(this, imageItem, rotation, adapter);
-                rotator.execute(imageItem.getFile());
-            }
+            //if(rotation != 0) {
+            //    AsyncRotator rotator = new AsyncRotator(this, imageItem, rotation, adapter);
+            //    rotator.execute(imageItem.getFile());
+            //}
 
             String sDate = exif.getAttribute(ExifInterface.TAG_DATETIME);
             Date date;

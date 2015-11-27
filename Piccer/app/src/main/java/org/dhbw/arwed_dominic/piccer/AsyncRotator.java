@@ -20,13 +20,13 @@ public class AsyncRotator extends AsyncTask<File, Void, Void> {
     private Context context;
     private static int tmpCount = 0;
     private File tmpLocation;
-    private ImageItemAdapter adapter;
+    private File destination;
 
-    public AsyncRotator (Context context, ImageItem imageItem, int rotation, ImageItemAdapter adapter) {
+    public AsyncRotator (Context context, ImageItem imageItem, int rotation) {
         this.imageItem = imageItem;
-        this.adapter = adapter;
         this.rotation = rotation;
         this.context = context;
+        this.destination = imageItem.getFile();
         this.tmpLocation = new File(this.context.getExternalFilesDir("tmp"), "tmpRotation" + tmpCount);
     }
     @Override
@@ -55,11 +55,9 @@ public class AsyncRotator extends AsyncTask<File, Void, Void> {
 
     @Override
     protected void onPostExecute(Void _) {
-        tmpLocation.delete();
         tmpCount--;
-        tmpLocation.renameTo(imageItem.getFile());
-        imageItem.notifyCache();
-        adapter.notifyDataSetChanged();
+        tmpLocation.renameTo(destination);
+        tmpLocation.delete();
     }
     @Override
     protected void onCancelled() {

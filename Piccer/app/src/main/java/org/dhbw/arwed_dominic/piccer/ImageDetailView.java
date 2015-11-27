@@ -3,15 +3,18 @@ package org.dhbw.arwed_dominic.piccer;
 import org.dhbw.arwed_dominic.piccer.util.SystemUiHider;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.BitmapRegionDecoder;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +25,7 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 import android.widget.ViewAnimator;
 
 import java.io.File;
@@ -36,23 +40,24 @@ import java.util.Set;
  *
  * @see SystemUiHider
  */
-public class ImageDetailView extends Activity {
+public class ImageDetailView extends AppCompatActivity {
     private PiccerDatabaseHandler handler;
     private Menu menu;
     private ImageItem imageItem;
+    private ImageView contentView;
+    private float rotation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_image_detail_view);
-        setupActionBar();
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         this.handler = new PiccerDatabaseHandler(this);
 
 
-        final ImageView contentView = (ImageView) findViewById(R.id.fullscreenImageView);
+        contentView = (ImageView) findViewById(R.id.fullscreenImageView);
 
         long id = Long.parseLong(getIntent().getStringExtra(Piccer.CLICKED_IMAGE));
         PiccerDatabaseHandler piccerDatabaseHandler = new PiccerDatabaseHandler(this);
@@ -63,18 +68,6 @@ public class ImageDetailView extends Activity {
             contentView.setImageURI(imageItem.getImageUri());
         } catch (OutOfMemoryError e) {
             //TODO
-        }
-    }
-
-
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            getActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 
@@ -105,6 +98,28 @@ public class ImageDetailView extends Activity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void rotateLeft(View _) {
+        rotation -= 90;
+        rotate();
+    }
+
+    public void rotateRight(View _) {
+        rotation += 90;
+        rotate();
+    }
+
+    public void rotate() {
+        contentView.setPivotX(contentView.getWidth() / 2);
+        contentView.setPivotY(contentView.getHeight() / 2);
+        contentView.setRotation(rotation);
+        AsyncRotator r = new AsyncRotator(this, imageItem, (int) rotation);
+        r.execute();
+    }
+
+    public void setTitle(View _) {
+
     }
 
 }

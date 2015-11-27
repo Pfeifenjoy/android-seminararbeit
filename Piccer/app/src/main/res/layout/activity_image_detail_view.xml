@@ -1,8 +1,10 @@
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="org.dhbw.arwed_dominic.piccer.ImageDetailView">
 
 
@@ -12,4 +14,57 @@
         android:layout_height="match_parent" />
 
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="right"
+        android:layout_height="match_parent">
+        <com.tr4android.support.extension.widget.FloatingActionMenu
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            app:fabMenuCloseIconAngle="135"
+            app:fabMenuLabelStyle="@style/label_style_dark">
+
+            <android.support.design.widget.FloatingActionButton
+                app:backgroundTint="@android:color/holo_red_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="20dp"
+                android:src="@drawable/ic_mode_edit_white_24dp"
+                app:pressedTranslationZ="12dp" />
+
+            <android.support.design.widget.FloatingActionButton
+                app:backgroundTint="@android:color/holo_red_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:src="@drawable/ic_rotate_right_white_24dp"
+                app:fabSize="mini"
+                android:onClick="rotateRight"
+                app:pressedTranslationZ="12dp" />
+            <android.support.design.widget.FloatingActionButton
+                app:backgroundTint="@android:color/holo_red_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:onClick="rotateLeft"
+                android:src="@drawable/ic_rotate_left_white_24dp"
+                app:fabSize="mini"
+                app:pressedTranslationZ="12dp" />
+            <android.support.design.widget.FloatingActionButton
+                app:backgroundTint="@android:color/holo_red_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:onClick="setTitle"
+                android:src="@drawable/ic_format_color_text_white_24dp"
+                app:fabSize="mini"
+                app:pressedTranslationZ="12dp" />
+
+
+        </com.tr4android.support.extension.widget.FloatingActionMenu>
+
+    </LinearLayout>
+
+</RelativeLayout>
