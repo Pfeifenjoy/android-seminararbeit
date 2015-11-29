@@ -1,5 +1,6 @@
 package org.dhbw.arwed_dominic.piccer;
 
+import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,7 @@ import android.graphics.BitmapRegionDecoder;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.LruCache;
 import android.widget.Toast;
@@ -68,6 +70,7 @@ public class ImageItem implements Serializable {
         BufferedInputStream in = null;
         BufferedOutputStream out = null;
         try {
+
             InputStream src = context.getContentResolver().openInputStream(uri);
             File dest = getFile();
 
