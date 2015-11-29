@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -81,7 +82,7 @@ public class ImageDetailView extends AppCompatActivity {
                 boolean exported= true;
                 try {
                     imageItem.saveToGallary();
-                } catch (IOException e) {
+                } catch (FileNotFoundException e) {
                     Log.w("Piccer", "Export Gallary exception", e);
                     exported = false;
                 }
@@ -102,12 +103,12 @@ public class ImageDetailView extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void rotateLeft(View _) {
+    public void rotateLeft(View v) {
         rotation -= 90;
         rotate();
     }
 
-    public void rotateRight(View _) {
+    public void rotateRight(View v) {
         rotation += 90;
         rotate();
     }
@@ -125,9 +126,9 @@ public class ImageDetailView extends AppCompatActivity {
 
     /**
      * Change the title of an image.
-     * @param _
+     * @param v
      */
-    public void setTitle(View _) {
+    public void setTitle(View v) {
         //TODO
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -2,12 +2,14 @@ package org.dhbw.arwed_dominic.piccer;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.LruCache;
@@ -248,27 +250,12 @@ public class ImageItem implements Serializable {
      * Exports the image into the gallary
      * @throws IOException
      */
-    public void saveToGallary() throws IOException {
-        InputStream in = null;
-        OutputStream out = null;
-        try {
-            in = new FileInputStream(getFile());
-            File destination = new File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                    + File.separator + fileName + ".png"
-                    );
-            out = new FileOutputStream(destination);
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-        } finally {
-            try {
-                if(in != null) in.close();
-                if(out != null) out.close();
-            } catch(IOException e) {}
-        }
+    public void saveToGallary() throws FileNotFoundException {
+        MediaStore.Images.Media.insertImage(context.getContentResolver(), getFile().getPath(), file.getName(), "Created by Piccer");
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri contentUri = Uri.fromFile(file);
+        mediaScanIntent.setData(contentUri);
+        context.sendBroadcast(mediaScanIntent);
     }
 
     /**

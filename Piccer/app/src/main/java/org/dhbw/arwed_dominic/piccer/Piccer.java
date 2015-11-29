@@ -25,6 +25,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -121,7 +122,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                     ImageItem imageItem = this.handler.getImage(this, id);
                     try {
                         imageItem.saveToGallary();
-                    } catch (IOException e) {
+                    } catch (FileNotFoundException e) {
                         Log.w("Piccer", "Export Issue", e);
                         exportedAll = false;
                     }
