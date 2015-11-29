@@ -86,3 +86,10 @@ Der Cache hat einen begrenzten Speicherbereich, sobald dieser voll ist beginnt d
 damit Bilder die nicht oft benötigt werden zu verwerfen.
 Dadurch kann es nicht passieren, dass enweder die Liste ins stocken geräht oder der Speicher überläuft.
 
+\subsection{Rotieren von Bildern}
+Um ein Bild zu rotieren, muss es anschließend auch in der Datei gespeichert werden.
+Dieser Vorgang dauert recht lange, denn das Bild muss geladen, gedreaht und wieder gespeichert werden.
+Die meiste Zeit davon wird allerdings zum Laden und speichern benötigt.
+Deshalb wird in der Applikation Piccer nur der ImageView eines Bildes gedreht.
+Anschließend wird auf einem seperaten Thread das Bild geladen, gedreht und gespeichert.
+
