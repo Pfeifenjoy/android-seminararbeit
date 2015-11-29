@@ -1,12 +1,12 @@
 \chapter{Technische Dokumentation}
 
 \section{Persistenz}
-Die Bilder der Anwendung werden in einem Applikations internen Ordner gespeichert.
+Die Bilder der Anwendung werden in einem applikationsinternen Ordner gespeichert.
 Um ein Bild laden zu können und Metainformationen über das Bild zu speichern,
-wird in einer SQLite Datenbank, Metainformationen von jedem Bild gespeichert.
+wird in einer SQLite Datenbank Metainformationen von jedem Bild gespeichert.
 Teil dieser Metainformationen ist der Pfad zu dem jeweiligen Bild.
-Außerdem war die Anforderung an die Applikation, dass das Datum und die Uhrzeit an der das
-Bild erstellt wurde angezeigt werden soll.
+Außerdem war die Anforderung an die Applikation, dass Datum und Uhrzeit an der das
+Bild erstellt wurde, angezeigt werden soll.
 Diese Daten finden sich ebenfalls in der Datenbank.
 
 \section{Klassen}
@@ -19,12 +19,12 @@ Im folgenden werden die wichtigsten Klassen beschrieben.
 \subsection{Piccer}
 Die Piccer Klasse ist eine Aktivität, die die Hauptseite verwaltet.
 Sie kümmert sich um das Laden von Views und initialisiert die Hauptliste.
-Außerdem dient sie zur Verwaltung von Menüs und startet eine neue Aktivität sobald auf ein 
+Außerdem dient sie zur Verwaltung von Menüs und startet eine neue Aktivität, sobald auf ein 
 Listenelement gedrückt wird.
 
 \subsection{ImageItem}
 Das ImageItem modelliert ein Listenelement.
-Es beinhaltet Referenzen auf die Datei in der das Bild gespeichert
+Es beinhaltet Referenzen, auf die Datei in der das Bild gespeichert wird
 und Informationen über das Bild, wie z.B. Titel und Datum.
 
 \subsection{PiccerDatabaseHandler}
@@ -34,12 +34,12 @@ Sie dient als Hilfsklasse zum Speichern und Laden von ImageItems.
 \subsection{ImageItemAdapter}
 Die Hauptliste ist durch einen ListView realisiert.
 Dieser ListView braucht einen Adapter zur Beschaffung von Daten, die in der Liste angezeigt werden sollen.
-Die Klasse ImageItemAdapter ist ein Adapter, der Daten aus einer Datenbanktabelle ließt
+Die Klasse ImageItemAdapter ist ein Adapter, der Daten aus einer Datenbanktabelle liest
 und anschließend die jeweiligen Views der Hauptliste mit diesen befüllt.
 
 \subsection{ImageThumbnailLoader}
 Damit Bilder in einer Liste angezeigt werden können,
-ohne dass der Ladevorgang die Liste beim scrollen ins Stocken bringt, 
+ohne dass der Ladevorgang die Liste beim Scrollen ins Stocken bringt, 
 müssen die Bilder auf einem separaten Thread geladen werden.
 Ein Objekt der Klasse ImageThumbnailLoader lädt ein Bild und platziert es anschließend
 in einem ImageView.
@@ -47,7 +47,7 @@ Dabei wird das Bild auf einem separaten Thread geladen.
 
 \subsection{ImageDetailView}
 Diese Klasse ist eine Aktivität, die ein Bild anzeigt. 
-Außerdem bietet sie dem Benutzer die Möglichkeit das Bild zu drehen oder einen neuen Titel zu setzen.
+Außerdem bietet sie dem Benutzer die Möglichkeit, das Bild zu drehen oder einen neuen Titel zu setzen.
 
 \subsection{AsyncRotator}
 Mit Hilfe dieser Klasse lassen sich Bilder drehen. 
@@ -55,10 +55,10 @@ Dabei wird die Rotierfunktion auf einem separaten Thread ausgeführt.
 Dadurch wird verhindert, dass die Benutzeroberfläche blockiert wird.
 Die Klasse legt zum Drehen der Daten ein temporäres File an.
 Sobald das Bild gedreht wurde und in dem temporären File gespeichert ist, 
-wird das eigentliche File des zu drehenden Bildes, durch das temporäre ersetzt.
+wird das eigentliche File des zu drehenden Bildes durch das temporäre ersetzt.
 Dies ist notwendig, da die Operation auf einem separaten Thread ausgeführt wird.
-Würde keine temporäre Datei verwendet werden und ein anderer Thread versucht 
-zur gleichen Zeit, in der das Bild gedreht wird, Daten aus der Datei zu lesen,
+Würde keine temporäre Datei verwendet werden und würde ein anderer Thread 
+zur gleichen Zeit, in der das Bild gedreht wird, versuchen Daten aus der Datei zu lesen,
 würde dies zu einer Beschädigung der Datei führen.
 
 \section{Implementierung am Beispiel von Funktionen}
@@ -81,11 +81,11 @@ sendIntent.setType("image/*");
 sendIntent.addFlags(sendIntent.FLAG_GRANT_READ_URI_PERMISSION);
 startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
 \end{lstlisting}
-Um mehrere Bilder zu versenden, müssen erst alle dazugehörigen URIs in einer ArrayList gespeichert werden. Danach wird ein neuer Intent erstellt, die Funktion \enquote{ACTION\_SEND\_MULTIPLE} gesetzt und anschließend die ArrayList übergeben, die die zu versendenden Bilder enthält. Es wir zusätzlich noch eine Nachricht erstellt und ein Menü, das alle installierten Apps auf dem Smartphone, die Inhalt versenden können, geöffnet.\\
-Im der Klasse \enquote{ImageDetailView} verläuft dieser Vorgang anlog, nur reicht es aus  ein einziges Image zu versenden. 
+Um mehrere Bilder zu versenden, müssen erst alle dazugehörigen URIs in einer ArrayList gespeichert werden. Danach wird ein neuer Intent erstellt, die Funktion \enquote{ACTION\_SEND\_MULTIPLE} gesetzt und anschließend die ArrayList übergeben, die die zu versendenden Bilder enthält. Es wir zusätzlich noch eine Nachricht erstellt und ein Menü, das alle installierten Apps, die Inhalte auf dem Smartphone versenden können, geöffnet.\\
+In der Klasse \enquote{ImageDetailView} verläuft dieser Vorgang analog, nur reicht es aus, ein einziges Image zu versenden. 
 
 \subsection{Laden von Bildern aus der Galerie}
-Wird in der ersten Activity die Funktion ausgewählt, dass ein Bild aus der Galerie geladen werden soll, so startet die in Listing \ref{loadPicture} beschriebene Methode \enquote{loadPicture}. Diese erstellt einen Intent und gibt die URI an den Konstruktor der Klasse ImageItem weiter. Der Konstruktor lädt dann eine Kopie des Bildes aus der Galerie in die App \enquote{Piccer}.
+Wird in der ersten Activity die Funktion ausgewählt, ein Bild aus der Galerie zu laden, so startet die in Listing \ref{loadPicture} beschriebene Methode \enquote{loadPicture}. Diese erstellt einen Intent und gibt die URI an den Konstruktor der Klasse ImageItem weiter. Der Konstruktor lädt dann eine Kopie des Bildes aus der Galerie in die App \enquote{Piccer}.
 \begin{lstlisting}[caption={Klasse Piccer: Laden von Bildern aus der Galerie}, label=loadPicture]
     public void loadPicture(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -128,7 +128,7 @@ Wird in der ersten Activity die Funktion ausgewählt, dass ein Bild aus der Gale
 
 
 \subsection{Vergeben eines Titels}
-Es wird ein Dialog geöffnet in dem ein Titel vergeben werden kann (siehe Listing \ref{setTitle}). Anschließend wird der Titel durch die Methode \verb+saveImage+ in der Datenbank gespeichert.
+Es wird ein Dialog geöffnet, in dem ein Titel vergeben werden kann (siehe Listing \ref{setTitle}). Anschließend wird der Titel durch die Methode \verb+saveImage+ in der Datenbank gespeichert.
 \begin{lstlisting}[caption={Titel vergeben}, label=setTitle]
 public void addImage(final ImageItem imageItem){
 
@@ -162,7 +162,7 @@ public void addImage(final ImageItem imageItem){
 }
 \end{lstlisting}
 \subsection{Löschen von Bildern}
-Um ein Bild zu löschen muss sowohl das File, in dem das Bild gespeichert ist gelöscht
+Um ein Bild zu löschen, muss sowohl das File, in dem das Bild gespeichert ist, gelöscht
 werden als auch der Tabelleneintrag in der Datenbank.
 Dafür gibt es in der Klasse PiccerDatabaseHandler die Methode \verb+deleteImages+ (siehe Listing \ref{deleteImages}), mit der mehrere Bilder durch eine Menge von IDs gelöscht werden können.
 \begin{lstlisting}[caption={Löschen mehrerer Bilder}, label=deleteImages]
@@ -191,7 +191,7 @@ public void deleteImages(Set<Long> imageIds) {
 \end{lstlisting}
 
 \subsection{Laden von Thumbnails}
-Ein großes Problem ist es Bilder in einer Liste anzuzeigen,
+Ein großes Problem ist es, Bilder in einer Liste anzuzeigen,
 da diese erst von der Festplatte geladen werden müssen und eine große Menge von Daten darstellen.
 Dadurch kann eine lange Ladezeit entstehen,
 wodurch das Scrollen der Liste anfängt zu ruckeln.
@@ -201,18 +201,18 @@ Dabei wird eine deutlich kleinere Kopie des Bildes redundant gespeichert.
 Dies verkürzt die Ladezeit des Bildes, löst aber nicht immer das Problem.
 Auf einem Smartphone mit einer sehr langsamen Festplatte kann es immer noch zu langen Ladezeiten kommen.
 Eine zweite Möglichkeit besteht darin, alle Bilder zu Beginn der Anwendung in den Hauptspeicher zu laden.
-Allerdings haben viele Smartphone nur einen begrenzten Arbeitsspeicher, wodurch bei einer 
+Allerdings haben viele Smartphones nur einen begrenzten Arbeitsspeicher, wodurch bei einer 
 zu großen Liste die Anwendung abbricht.
 
 Deshalb werden in der \enquote{Piccer} Anwendungen die Thumbnails asynchron auf einem separaten Thread geladen.
-Dabei wird auch nicht das komplette Bild geladen sondern nur ein eine komprimierte Version.
+Dabei wird auch nicht das komplette Bild geladen sondern nur eine komprimierte Version.
 Um nicht bereits geladene Bilder erneut laden zu müssen,
-hat die Klasse ImageItem ein privates statisches Attribut, welches die bereits geladenen Thumbnails zwischenspeichert.
-Dieses Attribut wird als Cache bezeichnet, es kümmert sich darum, dass Bilder die häufiger 
-benötigt werden länger gespeichert werden als Bilder die nur einmal geladen werden.
-Der Cache hat einen begrenzten Speicherbereich, sobald dieser voll ist, beginnt der Cache
+hat die Klasse ImageItem ein privates statisches Attribut, welches die bereits geladenen Thumbnails zwischen speichert.
+Dieses Attribut wird als Cache bezeichnet. Es kümmert sich darum, dass Bilder, die häufiger 
+benötigt werden, länger gespeichert werden als Bilder, die nur einmal geladen werden.
+Der Cache hat einen begrenzten Speicherbereich. Sobald dieser voll ist, beginnt er
 damit Bilder, die nicht oft benötigt werden, zu verwerfen.
-Dadurch kann es nicht passieren, dass entweder die Liste ins Stocken gerät oder der Speicher überläuft.
+Dadurch wird verhindert, dass entweder die Liste ins Stocken gerät oder der Speicher überläuft.
 
 \begin{figure}[H]
 \label{loadThumbnails}
