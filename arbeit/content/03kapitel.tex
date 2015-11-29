@@ -82,7 +82,7 @@ sendIntent.setType("image/*");
 sendIntent.addFlags(sendIntent.FLAG_GRANT_READ_URI_PERMISSION);
 startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
 \end{lstlisting}
-Um mehrere Bilder zu versenden, müssen erst alle dazugehörigen URIs in einer ArrayList gespeichert werden. Danach wird ein neuer Intent erstellt, die Action \enquote{ACTION\_SEND\_MULTIPLE} gesetzt und anschließend die ArrayList übergeben, die die zu versendenden Bilder enthält. Es wir zusätzlich noch eine Nachricht erstellt und ein Menü, das alle installierten Apps auf dem Smartphone, die Inhalt versenden können, geöffnet.\\
+Um mehrere Bilder zu versenden, müssen erst alle dazugehörigen URIs in einer ArrayList gespeichert werden. Danach wird ein neuer Intent erstellt, die Funktion \enquote{ACTION\_SEND\_MULTIPLE} gesetzt und anschließend die ArrayList übergeben, die die zu versendenden Bilder enthält. Es wir zusätzlich noch eine Nachricht erstellt und ein Menü, das alle installierten Apps auf dem Smartphone, die Inhalt versenden können, geöffnet.\\
 Im der Klasse \enquote{ImageDetailView} verläuft dieser Vorgang anlog, nur reicht es aus  ein einziges Image zu versenden. 
 
 \subsection{Laden von Bildern aus der Galerie}
