@@ -93,6 +93,39 @@ Im der Klasse \enquote{ImageDetailView} verläuft dieser Vorgang anlog, nur reic
 \includegraphics[width=0.65\textwidth]{images/Dialog}
 \caption{Bild teilen der Klasse Piccer}
 \end{figure}
+
+\begin{lstlisting}
+public void addImage(final ImageItem imageItem){
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle(R.string.pleaseSelectName);
+
+    // Set up the input
+    final EditText input = new EditText(this);
+    // Specify the type of input expected;
+    input.setInputType(InputType.TYPE_CLASS_TEXT );
+    builder.setView(input);
+
+    // Set up the buttons
+    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            String title = input.getText().toString();
+            imageItem.setTitle(title);
+            saveImage(imageItem);
+        }
+    });
+    builder.setNegativeButton(R.string.abort, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            saveImage(imageItem);
+            dialog.cancel();
+        }
+    });
+
+    builder.show();
+}
+\end{lstlisting}
 \subsection{Löschen von Bildern}
 \subsection{Laden von Thumbnails QUELLTEXT BSP}
 Ein großes Problem ist es Bilder in einer Liste anzuzeigen,
