@@ -17,6 +17,6 @@ public class Scroller implements Runnable {
 
     @Override
     public void run() {
-        this.listView.smoothScrollBy((direction ? this.listView.getHeight() * this.position : 0), 9000);
+        this.listView.smoothScrollBy((direction ? 1 : -1) * this.listView.getHeight() * this.position, 9000);
     }
 }

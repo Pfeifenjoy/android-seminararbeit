@@ -7,11 +7,10 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Parcel;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -24,7 +23,6 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,17 +58,20 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         ScrollView scrollView = (ScrollView)findViewById(R.id.scrollView);
         scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         mainImageList = (ListView)findViewById(R.id.mainImageList);
-        updateList();
+
+        adapter = new ImageItemAdapter(this, handler.getImageTableCursor("_id", order), 0);
+        mainImageList.setAdapter(adapter);
+
         mainImageList.setOnItemClickListener(this);
         mainImageList.setOnItemLongClickListener(this);
         mainImageList.setAdapter(adapter);
 
+        //Restore the old state of the list e.g. the position
         if(savedInstanceState != null) {
             listState = savedInstanceState.getParcelable(IMAGE_LIST_STATE);
             mainImageList.onRestoreInstanceState(listState);
             order = savedInstanceState.getBoolean(ORDER);
         }
-        updateList();
     }
 
     @Override
@@ -78,7 +79,6 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         super.onResume();
         updateList();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,6 +137,8 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
         }
         this.adapter.clearSelect();
+        this.menu.clear();
+        getMenuInflater().inflate(R.menu.menu_piccer, this.menu);
         return super.onOptionsItemSelected(item);
     }
 
@@ -174,28 +176,8 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
 
     private void saveImage(ImageItem imageItem) {
         File file = this.tmpImage.getFile();
-        int rotation = 0;
         try {
             ExifInterface exif = new ExifInterface(file.getAbsolutePath());
-            rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-            switch(rotation){
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotation = 270;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotation = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotation = 90;
-                    break;
-            }
-
-            //if(rotation != 0) {
-            //    AsyncRotator rotator = new AsyncRotator(this, imageItem, rotation, adapter);
-            //    rotator.execute(imageItem.getFile());
-            //}
-
             String sDate = exif.getAttribute(ExifInterface.TAG_DATETIME);
             Date date;
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
@@ -282,12 +264,11 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
     }
 
     private void updateList() {
+        listState = mainImageList.onSaveInstanceState();
         adapter = new ImageItemAdapter(this, handler.getImageTableCursor("_id", order), 0);
-        Parcelable p = mainImageList.onSaveInstanceState();
-        mainImageList.setAdapter(null);
         mainImageList.setAdapter(adapter);
-        mainImageList.onRestoreInstanceState(p);
-        mainImageList.invalidate();
         adapter.notifyDataSetChanged();
+        mainImageList.refreshDrawableState();
+        if(listState!=null) mainImageList.onRestoreInstanceState(listState);
     }
 }

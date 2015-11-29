@@ -1,17 +1,12 @@
 package org.dhbw.arwed_dominic.piccer;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
-import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.util.LruCache;
 import android.widget.Toast;
@@ -26,27 +21,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.Buffer;
-import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
 /**
- * Created by arwed on 24.10.15.
+ * A representation of an image, with the date etc.
  */
 public class ImageItem implements Serializable {
     private Date created;
     private File file;
-    private String name;
+    /**
+     * Name of the file.
+     */
+    private String fileName;
     private String title;
     private long id;
     private Context context;
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
 
+    /**
+     * A cache to speed up loading thumbnails.
+     */
     private static final LruCache<String, Bitmap> cache;
     static {
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
@@ -59,6 +56,12 @@ public class ImageItem implements Serializable {
         };
     }
 
+    /**
+     * Create an Image item by a given uri. This will copy the provided file
+     * and create a new Image item of it.
+     * @param context
+     * @param uri
+     */
     public ImageItem(Context context, Uri uri) {
         this.context = context;
         generateName();
@@ -92,14 +95,26 @@ public class ImageItem implements Serializable {
         }
     }
 
-    public ImageItem(Context context, Date created, String name, String title, long id) {
+    /**
+     * Create a model of an already existing image item.
+     * @param context
+     * @param created
+     * @param fileName
+     * @param title
+     * @param id
+     */
+    public ImageItem(Context context, Date created, String fileName, String title, long id) {
         this.context = context;
-        this.name = name;
+        this.fileName = fileName;
         this.created = created;
         this.id = id;
         this.title = title;
     }
 
+    /**
+     * Create a new image item.
+     * @param context
+     */
     public ImageItem(Context context) {
         generateName();
         this.context = context;
@@ -125,7 +140,7 @@ public class ImageItem implements Serializable {
         return BitmapFactory.decodeFile(file, options);
     }
     public Bitmap getThumbnail(int width, int height) {
-        if(cache.get(this.name) == null) {
+        if(cache.get(this.fileName) == null) {
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             final String file = getFile().getAbsolutePath();
@@ -133,9 +148,9 @@ public class ImageItem implements Serializable {
             options.inSampleSize = getInSampleSize(options, width, height);
             options.inJustDecodeBounds = false;
             Bitmap thumbnail = BitmapFactory.decodeFile(file, options);
-            cache.put(this.name, thumbnail);
+            cache.put(this.fileName, thumbnail);
             return thumbnail;
-        } else return cache.get(this.name);
+        } else return cache.get(this.fileName);
     }
 
     /**
@@ -147,7 +162,7 @@ public class ImageItem implements Serializable {
      * @return {Bitmap}
      */
     public Bitmap getThumbnail(int width, int height, double offset) {
-        if(cache.get(this.name) == null) {
+        if(cache.get(this.fileName) == null) {
             final BitmapFactory.Options options = new BitmapFactory.Options();
             final String file = getFile().getAbsolutePath();
             Bitmap thumbnail = null;
@@ -166,9 +181,9 @@ public class ImageItem implements Serializable {
             } catch (IOException e) {
                 thumbnail = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_broken_image_black_24dp);
             }
-            cache.put(this.name, thumbnail);
+            cache.put(this.fileName, thumbnail);
             return thumbnail;
-        } else return cache.get(this.name);
+        } else return cache.get(this.fileName);
 
     }
 
@@ -196,13 +211,13 @@ public class ImageItem implements Serializable {
 
     public File getFile() {
         this.file = this.file == null ?
-                new File(this.context.getExternalFilesDir("img"), this.name) : this.file;
+                new File(this.context.getExternalFilesDir("img"), this.fileName) : this.file;
         return this.file;
     }
 
 
     public String getName() {
-        return this.name;
+        return this.fileName;
     }
 
     public long getId() {
@@ -217,12 +232,19 @@ public class ImageItem implements Serializable {
         return this.title;
     }
 
+    /**
+     * Tell the cache that a new version of the imageItem exists.
+     */
     public void notifyCache() {
-        if(cache.get(this.name) != null) {
-            cache.remove(this.name);
+        if(cache.get(this.fileName) != null) {
+            cache.remove(this.fileName);
         }
     }
 
+    /**
+     * Exports the image into the gallary
+     * @throws IOException
+     */
     public void saveToGallary() throws IOException {
         InputStream in = null;
         OutputStream out = null;
@@ -230,7 +252,7 @@ public class ImageItem implements Serializable {
             in = new FileInputStream(getFile());
             File destination = new File(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                    + File.separator + name + ".png"
+                    + File.separator + fileName + ".png"
                     );
             out = new FileOutputStream(destination);
             byte[] buf = new byte[1024];
@@ -245,7 +267,11 @@ public class ImageItem implements Serializable {
             } catch(IOException e) {}
         }
     }
+
+    /**
+     * Create a unique file name.
+     */
     private void generateName() {
-        this.name = "image-" + UUID.randomUUID() + ".png";
+        this.fileName = "image-" + UUID.randomUUID() + ".png";
     }
 }

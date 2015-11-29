@@ -1,7 +1,6 @@
 package org.dhbw.arwed_dominic.piccer;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapRegionDecoder;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,7 +9,7 @@ import java.lang.ref.WeakReference;
 
 
 /**
- * Created by arwed on 25.10.15.
+ * Loads an image asynchronously to prevent blocking of the ui thread.
  */
 public class ImageThumbnailLoader extends AsyncTask<Integer, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;
@@ -19,6 +18,11 @@ public class ImageThumbnailLoader extends AsyncTask<Integer, Void, Bitmap> {
     public static int THUMBNAIL_WIDTH = 200;
     public static int THUMBNAIL_HEIGHT = 200;
 
+    /**
+     * Loads an image and puts it on an imageview.
+     * @param imageView
+     * @param imageItem
+     */
     public ImageThumbnailLoader(ImageView imageView, ImageItem imageItem) {
         this.imageViewReference = new WeakReference<ImageView>(imageView);
         this.imageItem = imageItem;
@@ -37,6 +41,7 @@ public class ImageThumbnailLoader extends AsyncTask<Integer, Void, Bitmap> {
         if(result != null && this.imageViewReference != null) {
             final ImageView imageView = imageViewReference.get();
             if(imageView != null) {
+                //set the image to its image view.
                 imageView.setImageBitmap(result);
                 imageView.setVisibility(View.VISIBLE);
             }

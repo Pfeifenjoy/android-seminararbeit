@@ -53,7 +53,7 @@
             app:fabMenuLabelStyle="@style/label_style_dark">
 
             <android.support.design.widget.FloatingActionButton
-                app:backgroundTint="@color/colorPrimary"
+                app:backgroundTint="@android:color/holo_red_dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
@@ -62,7 +62,7 @@
                 app:pressedTranslationZ="12dp" />
 
             <android.support.design.widget.FloatingActionButton
-                app:backgroundTint="@color/colorPrimary"
+                app:backgroundTint="@android:color/holo_red_dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
@@ -72,7 +72,7 @@
                 app:pressedTranslationZ="12dp" />
 
             <android.support.design.widget.FloatingActionButton
-                app:backgroundTint="@color/colorPrimary"
+                app:backgroundTint="@android:color/holo_red_dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"

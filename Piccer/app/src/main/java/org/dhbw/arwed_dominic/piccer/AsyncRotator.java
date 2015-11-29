@@ -46,7 +46,7 @@ public class AsyncRotator extends AsyncTask<File, Void, Void> {
     @Override
     protected Void doInBackground(File... params) {
         if(rotation == 0) return null;
-        Bitmap bitmap = BitmapFactory.decodeFile(imageItem.getFile().getAbsolutePath());
+        Bitmap bitmap = BitmapFactory.decodeFile(destination.getAbsolutePath());
         Matrix matrix = new Matrix();
         matrix.postRotate(rotation);
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);

@@ -116,6 +116,7 @@ public class ImageDetailView extends AppCompatActivity {
         contentView.setPivotX(contentView.getWidth() / 2);
         contentView.setPivotY(contentView.getHeight() / 2);
         contentView.setRotation(rotation);
+
         if(rotator != null)
             rotator.cancel(true);
         rotator = new AsyncRotator(this, imageItem, (int) rotation);
