@@ -7,7 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by arwed on 26.10.15.
+ * A Reference to an asynchronous image loader.
  */
 class AsyncDrawable extends BitmapDrawable {
     private final WeakReference<ImageThumbnailLoader> imageItemWeakReference;

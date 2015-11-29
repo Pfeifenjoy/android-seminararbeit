@@ -1,77 +1,60 @@
 package org.dhbw.arwed_dominic.piccer;
 
-import org.dhbw.arwed_dominic.piccer.util.SystemUiHider;
-
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.BitmapRegionDecoder;
-import android.graphics.Matrix;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
-import android.view.Window;
+import android.view.View;
 import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.Toolbar;
-import android.widget.ViewAnimator;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Set;
+import java.io.IOException;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- *
- * @see SystemUiHider
+ * An fullscreen activity which displays a single image an an ImageView.
+ * It gives the user the possibility of manipulating the image.
  */
 public class ImageDetailView extends AppCompatActivity {
     private PiccerDatabaseHandler handler;
-    private Menu menu;
+    /**
+     * Holds the current information about the image which is displayed.
+     */
     private ImageItem imageItem;
     private ImageView contentView;
+    /**
+     * Saves the last rotation of the image.
+     */
     private float rotation;
+    /**
+     * A task which rotates the image.
+     */
     private AsyncRotator rotator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_image_detail_view);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         this.handler = new PiccerDatabaseHandler(this);
-
-
         contentView = (ImageView) findViewById(R.id.fullscreenImageView);
 
+        //Load the image.
         long id = Long.parseLong(getIntent().getStringExtra(Piccer.CLICKED_IMAGE));
-        PiccerDatabaseHandler piccerDatabaseHandler = new PiccerDatabaseHandler(this);
-        imageItem = piccerDatabaseHandler.getImage(this, id);
+        imageItem = handler.getImage(this, id);
+
         if(!imageItem.getFile().exists()) {
             Toast.makeText(this, R.string.couldNotLoadImage, Toast.LENGTH_SHORT).show();
             finish();
         }
-
+        //Place the image.
         contentView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         try {
             contentView.setImageURI(imageItem.getImageUri());
@@ -84,7 +67,6 @@ public class ImageDetailView extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edit_main_image_list, menu);
-        this.menu = menu;
         return true;
     }
 
@@ -96,11 +78,21 @@ public class ImageDetailView extends AppCompatActivity {
                 finish();
                 break;
             case R.id.saveToGallery:
-                imageItem.saveToGallary();
-                Toast.makeText(getBaseContext(), R.string.addToGalery , Toast.LENGTH_SHORT).show();
+                boolean exported= true;
+                try {
+                    imageItem.saveToGallary();
+                } catch (IOException e) {
+                    Log.w("Piccer", "Export Gallary exception", e);
+                    exported = false;
+                }
+                if(exported)
+                    Toast.makeText(getBaseContext(), R.string.addToGalery , Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getBaseContext(), R.string.couldNotExport, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.share_item:
                 Intent sendIntent = new Intent();
+                //TODO
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_STREAM, imageItem.getImageUri());
                 sendIntent.setType("image/png");
@@ -130,7 +122,12 @@ public class ImageDetailView extends AppCompatActivity {
         rotator.execute();
     }
 
+    /**
+     * Change the title of an image.
+     * @param _
+     */
     public void setTitle(View _) {
+        //TODO
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.pleaseSelectName);

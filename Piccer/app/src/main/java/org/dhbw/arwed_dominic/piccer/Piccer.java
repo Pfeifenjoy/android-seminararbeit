@@ -114,11 +114,20 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
                 break;
 
             case R.id.saveToGallery:
+                boolean exportedAll = true;
                 for (long id : ids) {
                     ImageItem imageItem = this.handler.getImage(this, id);
-                    imageItem.saveToGallary();
+                    try {
+                        imageItem.saveToGallary();
+                    } catch (IOException e) {
+                        Log.w("Piccer", "Export Issue", e);
+                        exportedAll = false;
+                    }
                 }
-                Toast.makeText(getBaseContext(), R.string.addToGalery , Toast.LENGTH_SHORT).show();
+                if(exportedAll)
+                    Toast.makeText(getBaseContext(), R.string.addToGalery , Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getBaseContext(), R.string.couldNotExportImages, Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.changeOrder:
@@ -278,6 +287,7 @@ public class Piccer extends AppCompatActivity implements AdapterView.OnItemClick
         mainImageList.setAdapter(null);
         mainImageList.setAdapter(adapter);
         mainImageList.onRestoreInstanceState(p);
+        mainImageList.invalidate();
         adapter.notifyDataSetChanged();
     }
 }

@@ -2,6 +2,7 @@ package org.dhbw.arwed_dominic.piccer;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -221,13 +223,27 @@ public class ImageItem implements Serializable {
         }
     }
 
-    public void saveToGallary() {
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, getTitle());
-        values.put(MediaStore.Images.Media.DATE_TAKEN, getCreated());
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
-        values.put(MediaStore.MediaColumns.DATA, getFile().getAbsolutePath());
-        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    public void saveToGallary() throws IOException {
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = new FileInputStream(getFile());
+            File destination = new File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                    + File.separator + name + ".png"
+                    );
+            out = new FileOutputStream(destination);
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+        } finally {
+            try {
+                if(in != null) in.close();
+                if(out != null) out.close();
+            } catch(IOException e) {}
+        }
     }
     private void generateName() {
         this.name = "image-" + UUID.randomUUID() + ".png";

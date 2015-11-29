@@ -29,4 +29,6 @@
 
     <string name="couldNotLoadImage">Bild konnte nicht geladen werden.</string>
     <string name="changeOrder">Reihenfolge ändern</string>
+    <string name="couldNotExport">Das Bild konnte nicht exportiert werden.</string>
+    <string name="couldNotExportImages">Die Bilder konnten nicht exportiert werden.</string>
 </resources>
