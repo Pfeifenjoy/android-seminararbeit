@@ -111,7 +111,6 @@ public class PiccerDatabaseHandler extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         do {
-
             File file = new File(this.context.getExternalFilesDir("img"), c.getString(c.getColumnIndex(PATH)));
             file.delete();
         } while (c.moveToNext());

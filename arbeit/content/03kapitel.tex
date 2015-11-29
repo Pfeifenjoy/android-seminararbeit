@@ -61,8 +61,7 @@ Würde keine temporäre Datei verwendet werden und ein anderer Thread versucht
 zur gleichen Zeit, in der das Bild gedreht wird, Daten aus der Datei zu lesen,
 würde dies zu einer Beschädigung der Datei führen.
 
-\section{Implementierungsdetails}
-
+\section{Implementierung am Beispiel von Funktionen}
 
 \subsection{Versenden von Bildern}
 
@@ -87,8 +86,8 @@ Im der Klasse \enquote{ImageDetailView} verläuft dieser Vorgang anlog, nur reic
 
 \subsection{Laden von Bildern aus der Galerie}
 \subsection{Vergeben eines Titels}
-
-\begin{lstlisting}
+Es wird ein Dialog geöffnet in dem ein Titel vergeben werden kann (siehe Listing \ref{setTitle}). Anschließend wird der Titel durch die Methode \verb+saveImage+ in der Datenbank gespeichert.
+\begin{lstlisting}[caption={Titel vergeben}, label=setTitle]
 public void addImage(final ImageItem imageItem){
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -121,9 +120,37 @@ public void addImage(final ImageItem imageItem){
 }
 \end{lstlisting}
 \subsection{Löschen von Bildern}
-\subsection{Laden von Thumbnails QUELLTEXT BSP}
+Um ein Bild zu löschen muss der sowohl das File, in dem das Bild gespeichert ist gelöscht
+werden als auch der Tabelleneintrag in der Datenbank.
+Dafür gibt es in der Klasse PiccerDatabaseHandler die Methode \verb+deleteImages+ (siehe Listing \ref{deleteImages}), mit der mehrere Bilder durch eine Menge von ids gelöscht werden können.
+\begin{lstlisting}[caption={Löschen mehrerer Bilder}, label=deleteImages]
+public void deleteImages(Set<Long> imageIds) {
+    SQLiteDatabase db = this.getWritableDatabase();
+    String query = "SELECT " + PATH + " FROM " + TABLE_IMAGES
+            + " WHERE _id in (";
+    String subquery = "";
+    for(long id : imageIds) {
+        subquery += id + ", ";
+    }
+    subquery = subquery.substring(0, subquery.length() - 2);
+    query += subquery;
+    query += ")";
+    Cursor c = db.rawQuery(query, null);
+    c.moveToFirst();
+    do {
+
+        File file = new File(this.context.getExternalFilesDir("img"), c.getString(c.getColumnIndex(PATH)));
+        file.delete();
+    } while (c.moveToNext());
+    query = "DELETE FROM " + TABLE_IMAGES + " WHERE _id in (" + subquery + ")";
+    db.execSQL(query);
+    db.close();
+}
+\end{lstlisting}
+
+\subsection{Laden von Thumbnails}
 Ein großes Problem ist es Bilder in einer Liste anzuzeigen,
-da diese erst von der Festplatte geladen werden und eine große Menge von Daten darstellen.
+da diese erst von der Festplatte geladen werden müssen und eine große Menge von Daten darstellen.
 Dadurch kann eine lange Ladezeit entstehen,
 wodurch das Scrollen der Liste anfängt zu ruckeln.
 Um dieses Problem zu lösen gibt es mehrere Möglichkeiten.
@@ -144,6 +171,26 @@ benötigt werden länger gespeichert werden als Bilder die nur einmal geladen we
 Der Cache hat einen begrenzten Speicherbereich, sobald dieser voll ist, beginnt der Cache
 damit Bilder, die nicht oft benötigt werden, zu verwerfen.
 Dadurch kann es nicht passieren, dass entweder die Liste ins Stocken gerät oder der Speicher überläuft.
+
+\begin{figure}[H]
+\label{loadThumbnails}
+\centering
+\begin{tikzpicture}
+    \node(liste) {Liste};
+    \node(adapter)[right= of liste] {ImageItemAdapter};
+    \node(handler)[right= of adapter] {PiccerDatabaseHandler};
+    \node(database)[right= of handler] {Database};
+    \node(loader)[below= of handler] {ImageThumbnailLoader};
+    \node(cache)[right= of loader] {Cache};
+    \node(file)[right= of cache] {Filesystem};
+
+    \path
+    (liste) edge[post] (adapter)
+    (adapter) edge[post] (handler)
+    ;
+\end{tikzpicture}
+\caption{Ladevorgang von Thumbnails}
+\end{figure}
 
 \subsection{Rotieren von Bildern QUELLTEXT}
 Um ein Bild zu rotieren, muss es anschließend auch in der Datei gespeichert werden.
