@@ -176,17 +176,24 @@ Dadurch kann es nicht passieren, dass entweder die Liste ins Stocken gerät oder
 \label{loadThumbnails}
 \centering
 \begin{tikzpicture}
-    \node(liste) {Liste};
-    \node(adapter)[right= of liste] {ImageItemAdapter};
-    \node(handler)[right= of adapter] {PiccerDatabaseHandler};
-    \node(database)[right= of handler] {Database};
-    \node(loader)[below= of handler] {ImageThumbnailLoader};
-    \node(cache)[right= of loader] {Cache};
-    \node(file)[right= of cache] {Filesystem};
+    \node(liste)[fill=blue!40, inner sep=10pt] {Liste};
+    \node(adapter)[right= of liste, fill=blue!40, inner sep=10pt] {ImageItemAdapter};
+    \node(handler)[right= of adapter, fill=blue!40, inner sep=10pt] {PiccerDatabaseHandler};
+    \node(database)[right= of handler, fill=blue!40, inner sep=10pt] {Database};
+    \node(loader)[below= of handler, fill=blue!40, inner sep=10pt] {ImageThumbnailLoader};
+    \node(cache)[below= of loader, fill=blue!40, inner sep=10pt] {Cache};
+    \node(file)[below= of cache, fill=blue!40, inner sep=10pt] {Filesystem};
 
     \path
-    (liste) edge[post] (adapter)
-    (adapter) edge[post] (handler)
+    (liste) edge[pre] (adapter)
+    (adapter) edge[pre] (handler)
+    (handler) edge[pre] (database)
+    (adapter) edge[post, in=180, out=270, anchor=east, pos=0.2] node{\begin{varwidth}{4cm}
+    Starte neuen Thread, ImageView übergeben
+    \end{varwidth}} (loader)
+    (loader) edge[pre] (cache)
+    (cache) edge[pre] (file)
+    (cache) edge[post] (file)
     ;
 \end{tikzpicture}
 \caption{Ladevorgang von Thumbnails}
