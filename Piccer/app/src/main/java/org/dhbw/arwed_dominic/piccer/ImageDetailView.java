@@ -92,7 +92,7 @@ public class ImageDetailView extends AppCompatActivity {
                 break;
             case R.id.share_item:
                 Intent sendIntent = new Intent();
-                //TODO
+
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_STREAM, imageItem.getImageUri());
                 sendIntent.setType("image/png");
