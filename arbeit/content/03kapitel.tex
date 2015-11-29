@@ -85,6 +85,48 @@ Um mehrere Bilder zu versenden, müssen erst alle dazugehörigen URIs in einer A
 Im der Klasse \enquote{ImageDetailView} verläuft dieser Vorgang anlog, nur reicht es aus  ein einziges Image zu versenden. 
 
 \subsection{Laden von Bildern aus der Galerie}
+Wird in der ersten Activity die Funktion ausgewählt, dass ein Bild aus der Galerie geladen werden soll, so startet die in Listing \ref{loadPicture} beschriebene Methode \enquote{loadPicture}. Diese erstellt einen Intent und gibt die URI an den Konstruktor der Klasse ImageItem weiter. Der Konstruktor lädt dann eine Kopie des Bildes aus der Galerie in die App \enquote{Piccer}.
+\begin{lstlisting}[caption={Klasse Piccer: Laden von Bildern aus der Galerie}, label=loadPicture]
+    public void loadPicture(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_GALLARY);
+    }
+\end{lstlisting}
+\begin{lstlisting}[caption={Klasse ImageItem: Laden von Bildern aus der Galerie}, label=loadPicture2]
+ this.context = context;
+        generateName();
+        BufferedInputStream in = null;
+        BufferedOutputStream out = null;
+        try {
+
+            InputStream src = context.getContentResolver().openInputStream(uri);
+            File dest = getFile();
+
+            in = new BufferedInputStream(src);
+            out = new BufferedOutputStream(new FileOutputStream(dest));
+
+            byte[] buffer = new byte[1024];
+            in.read(buffer);
+            do {
+                out.write(buffer);
+            } while (in.read(buffer) != -1);
+
+            notifyCache();
+        } catch (FileNotFoundException e) {
+            Toast.makeText(context, R.string.couldNotLoadImage, Toast.LENGTH_SHORT).show();
+            Log.w("Piccer", "error", e);
+        } catch (IOException e) {
+            Toast.makeText(context, R.string.couldNotLoadImage, Toast.LENGTH_SHORT).show();
+            Log.w("Piccer", "error", e);
+        } finally {
+            try {
+                if (in != null) in.close();
+                if (out != null) out.close();
+            } catch (IOException e){}
+        }
+\end{lstlisting}
+
+
 \subsection{Vergeben eines Titels}
 Es wird ein Dialog geöffnet in dem ein Titel vergeben werden kann (siehe Listing \ref{setTitle}). Anschließend wird der Titel durch die Methode \verb+saveImage+ in der Datenbank gespeichert.
 \begin{lstlisting}[caption={Titel vergeben}, label=setTitle]
@@ -120,9 +162,9 @@ public void addImage(final ImageItem imageItem){
 }
 \end{lstlisting}
 \subsection{Löschen von Bildern}
-Um ein Bild zu löschen muss der sowohl das File, in dem das Bild gespeichert ist gelöscht
+Um ein Bild zu löschen muss sowohl das File, in dem das Bild gespeichert ist gelöscht
 werden als auch der Tabelleneintrag in der Datenbank.
-Dafür gibt es in der Klasse PiccerDatabaseHandler die Methode \verb+deleteImages+ (siehe Listing \ref{deleteImages}), mit der mehrere Bilder durch eine Menge von ids gelöscht werden können.
+Dafür gibt es in der Klasse PiccerDatabaseHandler die Methode \verb+deleteImages+ (siehe Listing \ref{deleteImages}), mit der mehrere Bilder durch eine Menge von IDs gelöscht werden können.
 \begin{lstlisting}[caption={Löschen mehrerer Bilder}, label=deleteImages]
 public void deleteImages(Set<Long> imageIds) {
     SQLiteDatabase db = this.getWritableDatabase();
@@ -205,4 +247,3 @@ Dieser Vorgang dauert recht lange, denn das Bild muss geladen, gedreht und wiede
 Die meiste Zeit davon wird allerdings zum Laden und speichern benötigt.
 Deshalb wird in der Applikation \enquote{Piccer} nur der ImageView eines Bildes gedreht.
 Anschließend wird auf einem eigenen Thread das Bild geladen, gedreht und gespeichert.
-
